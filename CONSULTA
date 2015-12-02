@@ -314,7 +314,7 @@ public class Consulta extends javax.swing.JFrame {
             }
         });
     }
-    private javax.swing.JTextField txtValor;
+    
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton btnCancelar;
@@ -330,5 +330,6 @@ public class Consulta extends javax.swing.JFrame {
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtValor;
     // End of variables declaration                   
 }
