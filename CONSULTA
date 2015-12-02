@@ -274,7 +274,6 @@ public class Consulta extends javax.swing.JFrame {
     private void limpiarCampos(){
         txtCodigo.setText("");
         txtNombre.setText("");
-        txtValor.setText("");
         txtDescripcion.setText("");
         txtCodigo.requestFocus();
     }
@@ -330,6 +329,5 @@ public class Consulta extends javax.swing.JFrame {
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtValor;
     // End of variables declaration                   
 }
