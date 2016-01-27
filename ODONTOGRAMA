@@ -1,7 +1,34 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package centro_odontologico;
+
+import Conexion.Conexion;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import java.awt.event.MouseEvent;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author FREDDY
+ */
 
 public class Odontograma extends javax.swing.JFrame {
 
+    CallableStatement callablestatement = null;
+    Conexion xd = new Conexion();
+    Connection cn = xd.conexion();
+    
+    String paciente = "";
+    int odontID = 0, isActivo = 0;
+    JButton btngen;
+    
     /**
      * Creates new form Odontograma
      */
@@ -10,6 +37,18 @@ public class Odontograma extends javax.swing.JFrame {
         setTitle("ODONTOGRAMA");
         setLocationRelativeTo(null);
         setResizable(false);
+        enableBtn(false);
+    }
+    
+    public Odontograma( String PacienteID, String nombre ) {
+        initComponents();
+        setTitle("ODONTOGRAMA");
+        setLocationRelativeTo(null);
+        setResizable(false);
+        enableBtn(false);
+        paciente = PacienteID;
+        txtPaciente.setText(nombre);
+        System.out.println(PacienteID);
     }
 
     /**
@@ -22,383 +61,945 @@ public class Odontograma extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jButton17 = new javax.swing.JButton();
-        jButton18 = new javax.swing.JButton();
-        jButton19 = new javax.swing.JButton();
-        jButton20 = new javax.swing.JButton();
-        jButton21 = new javax.swing.JButton();
-        jButton22 = new javax.swing.JButton();
-        jButton23 = new javax.swing.JButton();
-        jButton24 = new javax.swing.JButton();
-        jButton25 = new javax.swing.JButton();
-        jButton26 = new javax.swing.JButton();
-        jButton27 = new javax.swing.JButton();
-        jButton28 = new javax.swing.JButton();
-        jButton29 = new javax.swing.JButton();
-        jButton30 = new javax.swing.JButton();
-        jButton31 = new javax.swing.JButton();
-        jButton32 = new javax.swing.JButton();
-        jButton33 = new javax.swing.JButton();
-        jButton34 = new javax.swing.JButton();
-        jButton35 = new javax.swing.JButton();
-        jButton36 = new javax.swing.JButton();
-        jButton37 = new javax.swing.JButton();
-        jButton38 = new javax.swing.JButton();
-        jButton39 = new javax.swing.JButton();
-        jButton40 = new javax.swing.JButton();
-        jButton41 = new javax.swing.JButton();
-        jButton42 = new javax.swing.JButton();
-        jButton43 = new javax.swing.JButton();
-        jButton44 = new javax.swing.JButton();
-        jButton45 = new javax.swing.JButton();
-        jButton46 = new javax.swing.JButton();
-        jButton47 = new javax.swing.JButton();
-        jButton48 = new javax.swing.JButton();
-        jButton49 = new javax.swing.JButton();
-        jButton50 = new javax.swing.JButton();
-        jButton51 = new javax.swing.JButton();
-        jButton52 = new javax.swing.JButton();
+        btn18 = new javax.swing.JButton();
+        btn17 = new javax.swing.JButton();
+        btn15 = new javax.swing.JButton();
+        btn16 = new javax.swing.JButton();
+        btn13 = new javax.swing.JButton();
+        btn14 = new javax.swing.JButton();
+        btn12 = new javax.swing.JButton();
+        btn11 = new javax.swing.JButton();
+        btn48 = new javax.swing.JButton();
+        btn41 = new javax.swing.JButton();
+        btn42 = new javax.swing.JButton();
+        btn43 = new javax.swing.JButton();
+        btn44 = new javax.swing.JButton();
+        btn45 = new javax.swing.JButton();
+        btn46 = new javax.swing.JButton();
+        btn47 = new javax.swing.JButton();
+        btn28 = new javax.swing.JButton();
+        btn27 = new javax.swing.JButton();
+        btn26 = new javax.swing.JButton();
+        btn25 = new javax.swing.JButton();
+        btn24 = new javax.swing.JButton();
+        btn23 = new javax.swing.JButton();
+        btn22 = new javax.swing.JButton();
+        btn21 = new javax.swing.JButton();
+        btn31 = new javax.swing.JButton();
+        btn32 = new javax.swing.JButton();
+        btn33 = new javax.swing.JButton();
+        btn34 = new javax.swing.JButton();
+        btn35 = new javax.swing.JButton();
+        btn36 = new javax.swing.JButton();
+        btn37 = new javax.swing.JButton();
+        btn38 = new javax.swing.JButton();
+        btn55 = new javax.swing.JButton();
+        btn54 = new javax.swing.JButton();
+        btn52 = new javax.swing.JButton();
+        btn53 = new javax.swing.JButton();
+        btn51 = new javax.swing.JButton();
+        btn65 = new javax.swing.JButton();
+        btn64 = new javax.swing.JButton();
+        btn63 = new javax.swing.JButton();
+        btn62 = new javax.swing.JButton();
+        btn61 = new javax.swing.JButton();
+        btn85 = new javax.swing.JButton();
+        btn84 = new javax.swing.JButton();
+        btn83 = new javax.swing.JButton();
+        btn82 = new javax.swing.JButton();
+        btn81 = new javax.swing.JButton();
+        btn71 = new javax.swing.JButton();
+        btn72 = new javax.swing.JButton();
+        btn73 = new javax.swing.JButton();
+        btn74 = new javax.swing.JButton();
+        btn75 = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        btnLimpiar = new javax.swing.JButton();
+        txtCantPieza = new javax.swing.JTextField();
+        lblPiezas = new javax.swing.JLabel();
+        lblPaciente = new javax.swing.JLabel();
+        txtPaciente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1026, 544));
+        setMinimumSize(new java.awt.Dimension(1026, 544));
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        jPanel1.setEnabled(false);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton1.setBorder(null);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setLabel("18");
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton2.setText("17");
-        jButton2.setBorder(null);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton3.setText("15");
-        jButton3.setBorder(null);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton4.setText("16");
-        jButton4.setBorder(null);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton5.setText("13");
-        jButton5.setBorder(null);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton6.setText("14");
-        jButton6.setBorder(null);
-        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton7.setText("12");
-        jButton7.setToolTipText("");
-        jButton7.setBorder(null);
-        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton8.setText("11");
-        jButton8.setBorder(null);
-        jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton8.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton9.setText("48");
-        jButton9.setBorder(null);
-        jButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton9.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton10.setText("41");
-        jButton10.setBorder(null);
-        jButton10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton10.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton11.setText("42");
-        jButton11.setBorder(null);
-        jButton11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton11.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton12.setText("43");
-        jButton12.setBorder(null);
-        jButton12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton12.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton13.setText("44");
-        jButton13.setBorder(null);
-        jButton13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton13.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-        jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton14.setText("45");
-        jButton14.setBorder(null);
-        jButton14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton14.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        jButton14.addActionListener(new java.awt.event.ActionListener() {
+        btn18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn18.setText("18");
+        btn18.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn18.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
+                btnActionPerformed(evt);
             }
         });
 
-        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton15.setText("46");
-        jButton15.setBorder(null);
-        jButton15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton15.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn17.setText("17");
+        btn17.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn17.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton16.setText("47");
-        jButton16.setBorder(null);
-        jButton16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton16.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn15.setText("15");
+        btn15.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn15.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton17.setText("28");
-        jButton17.setBorder(null);
-        jButton17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton17.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn16.setText("16");
+        btn16.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn16.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton18.setText("27");
-        jButton18.setBorder(null);
-        jButton18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton18.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn13.setText("13");
+        btn13.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn13.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton19.setText("26");
-        jButton19.setBorder(null);
-        jButton19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton19.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn14.setText("14");
+        btn14.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn14.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton20.setText("25");
-        jButton20.setBorder(null);
-        jButton20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton20.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn12.setText("12");
+        btn12.setToolTipText("");
+        btn12.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn12.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton21.setText("24");
-        jButton21.setBorder(null);
-        jButton21.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton21.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn11.setText("11");
+        btn11.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn11.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton22.setText("23");
-        jButton22.setBorder(null);
-        jButton22.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton22.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn48.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn48.setText("48");
+        btn48.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn48.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn48.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn48.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn48.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton23.setText("22");
-        jButton23.setBorder(null);
-        jButton23.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton23.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn41.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn41.setText("41");
+        btn41.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn41.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn41.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn41.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn41.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton24.setText("21");
-        jButton24.setBorder(null);
-        jButton24.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton24.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn42.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn42.setText("42");
+        btn42.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn42.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn42.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn42.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn42.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton25.setText("31");
-        jButton25.setBorder(null);
-        jButton25.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton25.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn43.setText("43");
+        btn43.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn43.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn43.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn43.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn43.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton26.setText("32");
-        jButton26.setBorder(null);
-        jButton26.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton26.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn44.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn44.setText("44");
+        btn44.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn44.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn44.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn44.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn44.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton27.setText("33");
-        jButton27.setBorder(null);
-        jButton27.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton27.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn45.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn45.setText("45");
+        btn45.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn45.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn45.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn45.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn45.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton28.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton28.setText("34");
-        jButton28.setBorder(null);
-        jButton28.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton28.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn46.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn46.setText("46");
+        btn46.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn46.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn46.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn46.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn46.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton29.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton29.setText("35");
-        jButton29.setBorder(null);
-        jButton29.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton29.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn47.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn47.setText("47");
+        btn47.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn47.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn47.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn47.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn47.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton30.setText("36");
-        jButton30.setBorder(null);
-        jButton30.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton30.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn28.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn28.setText("28");
+        btn28.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn28.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn28.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn28.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn28.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton31.setText("37");
-        jButton31.setBorder(null);
-        jButton31.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton31.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn27.setText("27");
+        btn27.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn27.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn27.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn27.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn27.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
-        jButton32.setText("38");
-        jButton32.setBorder(null);
-        jButton32.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton32.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn26.setText("26");
+        btn26.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn26.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn26.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn26.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn26.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton33.setText("55");
-        jButton33.setBorder(null);
-        jButton33.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton33.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn25.setText("25");
+        btn25.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn25.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn25.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn25.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn25.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton34.setText("54");
-        jButton34.setBorder(null);
-        jButton34.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton34.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn24.setText("24");
+        btn24.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn24.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn24.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn24.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn24.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton35.setText("52");
-        jButton35.setBorder(null);
-        jButton35.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton35.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn23.setText("23");
+        btn23.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn23.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn23.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn23.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton36.setText("53");
-        jButton36.setBorder(null);
-        jButton36.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton36.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn22.setText("22");
+        btn22.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn22.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn22.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn22.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton37.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton37.setText("51");
-        jButton37.setBorder(null);
-        jButton37.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton37.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn21.setText("21");
+        btn21.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn21.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn21.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn21.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton38.setText("65");
-        jButton38.setBorder(null);
-        jButton38.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton38.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn31.setText("31");
+        btn31.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn31.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn31.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn31.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn31.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton39.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton39.setText("64");
-        jButton39.setBorder(null);
-        jButton39.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton39.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn32.setText("32");
+        btn32.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn32.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn32.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn32.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn32.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton40.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton40.setText("63");
-        jButton40.setBorder(null);
-        jButton40.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton40.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn33.setText("33");
+        btn33.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn33.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn33.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn33.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn33.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton41.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton41.setText("62");
-        jButton41.setBorder(null);
-        jButton41.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton41.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn34.setText("34");
+        btn34.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn34.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn34.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn34.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn34.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton42.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton42.setText("61");
-        jButton42.setBorder(null);
-        jButton42.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton42.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn35.setText("35");
+        btn35.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn35.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn35.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn35.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn35.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton43.setText("85");
-        jButton43.setBorder(null);
-        jButton43.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton43.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn36.setText("36");
+        btn36.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn36.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn36.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn36.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn36.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton44.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton44.setText("84");
-        jButton44.setBorder(null);
-        jButton44.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton44.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn37.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn37.setText("37");
+        btn37.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn37.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn37.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn37.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn37.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton45.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton45.setText("83");
-        jButton45.setBorder(null);
-        jButton45.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton45.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_g.png"))); // NOI18N
+        btn38.setText("38");
+        btn38.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn38.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn38.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn38.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn38.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton46.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton46.setText("82");
-        jButton46.setBorder(null);
-        jButton46.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton46.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn55.setBackground(new java.awt.Color(153, 153, 153));
+        btn55.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn55.setText("55");
+        btn55.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn55.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn55.setOpaque(false);
+        btn55.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn55.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn55.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton47.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton47.setText("81");
-        jButton47.setBorder(null);
-        jButton47.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton47.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn54.setBackground(new java.awt.Color(153, 153, 153));
+        btn54.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn54.setText("54");
+        btn54.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn54.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn54.setOpaque(false);
+        btn54.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn54.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn54.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton48.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton48.setText("71");
-        jButton48.setBorder(null);
-        jButton48.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton48.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn52.setBackground(new java.awt.Color(153, 153, 153));
+        btn52.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn52.setText("52");
+        btn52.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn52.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn52.setOpaque(false);
+        btn52.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn52.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn52.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton49.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton49.setText("72");
-        jButton49.setBorder(null);
-        jButton49.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton49.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn53.setBackground(new java.awt.Color(153, 153, 153));
+        btn53.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn53.setText("53");
+        btn53.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn53.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn53.setOpaque(false);
+        btn53.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn53.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn53.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton50.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton50.setText("73");
-        jButton50.setBorder(null);
-        jButton50.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton50.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn51.setBackground(new java.awt.Color(153, 153, 153));
+        btn51.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn51.setText("51");
+        btn51.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn51.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn51.setOpaque(false);
+        btn51.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn51.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn51.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton51.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton51.setText("74");
-        jButton51.setBorder(null);
-        jButton51.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton51.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn65.setBackground(new java.awt.Color(153, 153, 153));
+        btn65.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn65.setText("65");
+        btn65.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn65.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn65.setOpaque(false);
+        btn65.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn65.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn65.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
-        jButton52.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
-        jButton52.setText("75");
-        jButton52.setBorder(null);
-        jButton52.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton52.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn64.setBackground(new java.awt.Color(153, 153, 153));
+        btn64.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn64.setText("64");
+        btn64.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn64.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn64.setOpaque(false);
+        btn64.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn64.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn64.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn63.setBackground(new java.awt.Color(153, 153, 153));
+        btn63.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn63.setText("63");
+        btn63.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn63.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn63.setOpaque(false);
+        btn63.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn63.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn63.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn62.setBackground(new java.awt.Color(153, 153, 153));
+        btn62.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn62.setText("62");
+        btn62.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn62.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn62.setOpaque(false);
+        btn62.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn62.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn62.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn61.setBackground(new java.awt.Color(153, 153, 153));
+        btn61.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn61.setText("61");
+        btn61.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn61.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn61.setOpaque(false);
+        btn61.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn61.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn61.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn85.setBackground(new java.awt.Color(153, 153, 153));
+        btn85.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn85.setText("85");
+        btn85.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn85.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn85.setOpaque(false);
+        btn85.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn85.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn85.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn84.setBackground(new java.awt.Color(153, 153, 153));
+        btn84.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn84.setText("84");
+        btn84.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn84.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn84.setOpaque(false);
+        btn84.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn84.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn84.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn83.setBackground(new java.awt.Color(153, 153, 153));
+        btn83.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn83.setText("83");
+        btn83.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn83.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn83.setOpaque(false);
+        btn83.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn83.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn83.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn82.setBackground(new java.awt.Color(153, 153, 153));
+        btn82.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn82.setText("82");
+        btn82.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn82.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn82.setOpaque(false);
+        btn82.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn82.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn82.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn81.setBackground(new java.awt.Color(153, 153, 153));
+        btn81.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn81.setText("81");
+        btn81.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn81.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn81.setOpaque(false);
+        btn81.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn81.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn81.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn71.setBackground(new java.awt.Color(153, 153, 153));
+        btn71.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn71.setText("71");
+        btn71.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn71.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn71.setOpaque(false);
+        btn71.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn71.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn71.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn72.setBackground(new java.awt.Color(153, 153, 153));
+        btn72.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn72.setText("72");
+        btn72.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn72.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn72.setOpaque(false);
+        btn72.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn72.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn72.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn73.setBackground(new java.awt.Color(153, 153, 153));
+        btn73.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn73.setText("73");
+        btn73.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn73.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn73.setOpaque(false);
+        btn73.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn73.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn73.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn74.setBackground(new java.awt.Color(153, 153, 153));
+        btn74.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn74.setText("74");
+        btn74.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn74.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn74.setOpaque(false);
+        btn74.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn74.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn74.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btn75.setBackground(new java.awt.Color(153, 153, 153));
+        btn75.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pieza_p.png"))); // NOI18N
+        btn75.setText("75");
+        btn75.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn75.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn75.setOpaque(false);
+        btn75.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        btn75.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMouseClicked(evt);
+            }
+        });
+        btn75.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -408,118 +1009,118 @@ public class Odontograma extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn18, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn17, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn16, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn15, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn14, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn13, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn12, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn11, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(jButton24, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn21, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn22, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton22, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn23, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton21, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn24, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn25, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton19, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn26, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn27, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btn28, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn55, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn48, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn47, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn46, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(btn45, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btn44, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn54, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn43, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(btn42, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(21, 21, 21)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jButton45, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btn83, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jButton46, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(btn82, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jButton36, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btn53, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jButton35, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                                .addComponent(btn52, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(195, 195, 195)
-                                .addComponent(jButton43, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn85, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(21, 21, 21)
-                                .addComponent(jButton44, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btn84, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton37, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton47, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn41, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn51, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn81, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton25, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton42, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton48, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn31, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn61, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn71, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton41, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton49, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(btn62, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn72, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btn32, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton27, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton40, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton50, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn33, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn63, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn73, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton39, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton51, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn34, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn64, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn74, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton38, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btn35, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn65, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton30, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn36, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton31, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn37, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton32, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton52, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btn38, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn75, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -527,64 +1128,64 @@ public class Odontograma extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton19, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton21, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton22, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton24, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn28, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn27, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn26, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn25, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn24, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn23, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn22, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn21, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn12, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn13, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn14, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn15, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn16, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn17, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn18, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton32, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton31, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton30, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton27, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton25, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn38, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn37, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn36, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn35, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn34, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn33, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn32, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn31, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn41, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn42, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn43, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn44, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn45, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn46, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn47, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn48, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton36, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton35, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton37, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton42, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton41, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton40, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton39, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton38, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn55, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn54, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn53, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn52, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn51, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn61, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn62, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn63, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn64, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn65, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton43, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton44, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton45, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton46, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton47, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton48, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton49, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton50, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton51, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton52, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn85, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn84, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn83, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn82, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn81, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn71, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn72, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn73, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn74, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn75, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -604,37 +1205,73 @@ public class Odontograma extends javax.swing.JFrame {
             }
         });
 
-        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/trash_32.png"))); // NOI18N
-        btnLimpiar.setText("Limpiar");
+        txtCantPieza.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtCantPieza.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCantPieza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantPiezaActionPerformed(evt);
+            }
+        });
+        txtCantPieza.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantPiezaKeyTyped(evt);
+            }
+        });
+
+        lblPiezas.setText("No. Piezas:");
+
+        lblPaciente.setText("Paciente:");
+
+        txtPaciente.setEnabled(false);
+        txtPaciente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPacienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(326, 326, 326)
-                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(376, 376, 376)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnCancelar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(lblPaciente)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblPiezas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtCantPieza, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCantPieza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPiezas)
+                    .addComponent(lblPaciente)
+                    .addComponent(txtPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -642,18 +1279,68 @@ public class Odontograma extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
-        dispose();
+        cerrarConexion();        
+        dispose();        
     }                                           
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "Se realizo con exito el registro.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+        if ( txtCantPieza.getText().equals("") ){
+            JOptionPane.showMessageDialog(null, "Faltan datos por ingresar.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            txtCantPieza.requestFocus();
+        }else{
+            if( guardarOdontograma() == 1 ){
+                JOptionPane.showMessageDialog(null, "Se realizo el registro correctamente",
+                "Informativo", JOptionPane.INFORMATION_MESSAGE);
+                cerrarConexion();
+                enableBtn(true);
+                btnGuardar.setEnabled(false);
+            }
+        }
     }                                          
 
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-    }                                         
+    private void btnActionPerformed(java.awt.event.ActionEvent evt) {                                    
+        // Este evento afecta a todos los botones
+        btngen = (JButton)evt.getSource();        
+        winPiezaDental( btngen.getText() );
+        btngen.setEnabled(false);
+        isActivo = 0;
+    }                                   
 
+    private void btnMouseClicked(java.awt.event.MouseEvent evt) {                                 
+        // Este evento afecta a todos los botones        
+        btngen = (JButton)evt.getSource();
+        if ( evt.getButton() == MouseEvent.BUTTON3 ) {           
+            btngen.setEnabled(true);
+            isActivo = 1;
+        }
+    }                                
+
+    private void txtCantPiezaActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        // TODO add your handling code here:
+    }                                            
+
+    private void txtCantPiezaKeyTyped(java.awt.event.KeyEvent evt) {                                      
+        int num_caracteres = 2;
+        char c= evt.getKeyChar();
+        if(Character.isLetter(c)){
+            getToolkit().beep();
+            evt.consume();    
+            JOptionPane.showMessageDialog(null,"Solo se admite números" , "Validación", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        if(txtCantPieza.getText().length()== num_caracteres){ // solo admite 10 caracteres
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane,"Solo 2 caracteres");
+        }
+    }                                     
+
+    private void txtPacienteActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+    }                                           
+   
+    
     /**
      * @param args the command line arguments
      */
@@ -689,62 +1376,149 @@ public class Odontograma extends javax.swing.JFrame {
         });
     }
 
+    //***************************************//
+    //***************************************//
+    //*********  F U N C I O N E S  *********//  
+    //***************************************//
+    //***************************************//
+        
+    private void winPiezaDental( String No ){
+        Pieza_Dental obj = new Pieza_Dental( No, odontID, isActivo );
+        obj.setVisible(true);
+    }
+    
+    private void enableBtn( boolean state ){                
+        btn11.setEnabled(state); btn12.setEnabled(state); btn13.setEnabled(state);
+        btn14.setEnabled(state); btn15.setEnabled(state); btn16.setEnabled(state);
+        btn17.setEnabled(state); btn18.setEnabled(state);
+        btn21.setEnabled(state); btn22.setEnabled(state); btn23.setEnabled(state);
+        btn24.setEnabled(state); btn25.setEnabled(state); btn26.setEnabled(state);
+        btn27.setEnabled(state); btn28.setEnabled(state); 
+        btn31.setEnabled(state); btn32.setEnabled(state); btn33.setEnabled(state);
+        btn34.setEnabled(state); btn35.setEnabled(state); btn36.setEnabled(state);
+        btn37.setEnabled(state); btn38.setEnabled(state); 
+        btn41.setEnabled(state); btn42.setEnabled(state); btn43.setEnabled(state);
+        btn44.setEnabled(state); btn45.setEnabled(state); btn46.setEnabled(state);
+        btn47.setEnabled(state); btn48.setEnabled(state); 
+        btn51.setEnabled(state); btn52.setEnabled(state); btn53.setEnabled(state);
+        btn54.setEnabled(state); btn55.setEnabled(state);
+        btn61.setEnabled(state); btn62.setEnabled(state); btn63.setEnabled(state);
+        btn64.setEnabled(state); btn65.setEnabled(state);
+        btn71.setEnabled(state); btn72.setEnabled(state); btn73.setEnabled(state);
+        btn74.setEnabled(state); btn75.setEnabled(state);
+        btn81.setEnabled(state); btn82.setEnabled(state); btn83.setEnabled(state);
+        btn84.setEnabled(state); btn85.setEnabled(state);
+    }
+    
+    private int guardarOdontograma(){
+        int save = 0;
+        
+        try{               
+            cn.setAutoCommit(false);
+            
+            String procedure = "{call crearOdontogramaProcedure(?,?,?)}";
+            callablestatement = cn.prepareCall(procedure);
+
+            callablestatement.setInt(1, Integer.parseInt(txtCantPieza.getText()) );
+            callablestatement.setString(2,paciente);            
+            callablestatement.registerOutParameter(3, java.sql.Types.INTEGER);
+           
+            callablestatement.executeUpdate();
+           
+            odontID = callablestatement.getInt(3);
+            System.out.println("Id: " + odontID);
+            
+            save = 1;
+            
+            cn.commit();
+        }catch(SQLException sqle){
+            try{  // Vuelve atras los cambios
+                cn.rollback();
+            } catch(Exception e){} //Manejo de errores                
+            
+            JOptionPane.showMessageDialog(null, "Código de Error: " + sqle.getErrorCode() + "\n" +
+                        "Estado de Error: " + sqle.getSQLState() + "\n" + 
+                        "Mensaje de Error: " + sqle.getMessage(),
+                        "Advertencia", JOptionPane.ERROR_MESSAGE); 
+        }
+        
+        if (save == 1) {
+            return( save );
+        }
+        return( save );
+    }
+    
+    public void cerrarConexion(){
+        try {
+            cn.close();
+            System.out.println("Desconectado: " + cn.isClosed());  
+        } catch (SQLException sqle) {
+            JOptionPane.showMessageDialog(null, "Código de Error: " + sqle.getErrorCode() + "\n" +
+                        "Estado de Error: " + sqle.getSQLState() + "\n" + 
+                        "Mensaje de Error: " + sqle.getMessage(),
+                        "Advertencia", JOptionPane.ERROR_MESSAGE); 
+        }
+    }
+    
     // Variables declaration - do not modify                     
+    private javax.swing.JButton btn11;
+    private javax.swing.JButton btn12;
+    private javax.swing.JButton btn13;
+    private javax.swing.JButton btn14;
+    private javax.swing.JButton btn15;
+    private javax.swing.JButton btn16;
+    private javax.swing.JButton btn17;
+    private javax.swing.JButton btn18;
+    private javax.swing.JButton btn21;
+    private javax.swing.JButton btn22;
+    private javax.swing.JButton btn23;
+    private javax.swing.JButton btn24;
+    private javax.swing.JButton btn25;
+    private javax.swing.JButton btn26;
+    private javax.swing.JButton btn27;
+    private javax.swing.JButton btn28;
+    private javax.swing.JButton btn31;
+    private javax.swing.JButton btn32;
+    private javax.swing.JButton btn33;
+    private javax.swing.JButton btn34;
+    private javax.swing.JButton btn35;
+    private javax.swing.JButton btn36;
+    private javax.swing.JButton btn37;
+    private javax.swing.JButton btn38;
+    private javax.swing.JButton btn41;
+    private javax.swing.JButton btn42;
+    private javax.swing.JButton btn43;
+    private javax.swing.JButton btn44;
+    private javax.swing.JButton btn45;
+    private javax.swing.JButton btn46;
+    private javax.swing.JButton btn47;
+    private javax.swing.JButton btn48;
+    private javax.swing.JButton btn51;
+    private javax.swing.JButton btn52;
+    private javax.swing.JButton btn53;
+    private javax.swing.JButton btn54;
+    private javax.swing.JButton btn55;
+    private javax.swing.JButton btn61;
+    private javax.swing.JButton btn62;
+    private javax.swing.JButton btn63;
+    private javax.swing.JButton btn64;
+    private javax.swing.JButton btn65;
+    private javax.swing.JButton btn71;
+    private javax.swing.JButton btn72;
+    private javax.swing.JButton btn73;
+    private javax.swing.JButton btn74;
+    private javax.swing.JButton btn75;
+    private javax.swing.JButton btn81;
+    private javax.swing.JButton btn82;
+    private javax.swing.JButton btn83;
+    private javax.swing.JButton btn84;
+    private javax.swing.JButton btn85;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
-    private javax.swing.JButton jButton22;
-    private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton24;
-    private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton26;
-    private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton28;
-    private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton30;
-    private javax.swing.JButton jButton31;
-    private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton33;
-    private javax.swing.JButton jButton34;
-    private javax.swing.JButton jButton35;
-    private javax.swing.JButton jButton36;
-    private javax.swing.JButton jButton37;
-    private javax.swing.JButton jButton38;
-    private javax.swing.JButton jButton39;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton40;
-    private javax.swing.JButton jButton41;
-    private javax.swing.JButton jButton42;
-    private javax.swing.JButton jButton43;
-    private javax.swing.JButton jButton44;
-    private javax.swing.JButton jButton45;
-    private javax.swing.JButton jButton46;
-    private javax.swing.JButton jButton47;
-    private javax.swing.JButton jButton48;
-    private javax.swing.JButton jButton49;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton50;
-    private javax.swing.JButton jButton51;
-    private javax.swing.JButton jButton52;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblPaciente;
+    private javax.swing.JLabel lblPiezas;
+    private javax.swing.JTextField txtCantPieza;
+    private javax.swing.JTextField txtPaciente;
     // End of variables declaration                   
 }
