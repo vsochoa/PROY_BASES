@@ -32,8 +32,12 @@ public class HistorialClinico extends javax.swing.JFrame {
     Connection cn = xd.conexion();
     
     
+    
     public HistorialClinico() {
         initComponents();
+        setTitle("HISTORIAL CLINICO");
+        setLocationRelativeTo(null);
+        setResizable(false);
     }
 
     /**
