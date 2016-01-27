@@ -5,7 +5,6 @@
  */
 package centro_odontologico;
 
-/**
 
 public class Acerca_de extends javax.swing.JFrame {
 
