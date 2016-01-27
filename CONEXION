@@ -1,0 +1,23 @@
+package Conexion;
+import java.sql.*;
+import javax.swing.*;
+/**
+ *
+ * @author Raquel 
+ */
+public class Conexion {
+    Connection conect=null;
+    public Connection conexion() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");            
+            //  grupo2 es el nombre de la base de datos, 
+            //  "root" es el usuario 
+            //  segundo "root" es la contraseña
+            conect= DriverManager.getConnection("jdbc:mysql://localhost/CentroOdontologico","root","root");
+            System.out.println("Driver Cargado ");           
+        } catch (ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error de conexión  "+e);
+		}
+        return conect;
+    }   
+}
