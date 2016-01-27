@@ -1,9 +1,30 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package centro_odontologico;
+
+import Conexion.Conexion;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-
+/**
+ *
+ * @author FREDDY
+ */
 public class Tratamiento extends javax.swing.JFrame {
 
+    Statement sent;
+    CallableStatement callablestatement =null;
+    Conexion xd =new Conexion();
+    Connection cn = xd.conexion();
     /**
      * Creates new form Tratamiento
      */
@@ -24,20 +45,17 @@ public class Tratamiento extends javax.swing.JFrame {
     private void initComponents() {
 
         jpnlInformacion = new javax.swing.JPanel();
-        lblCodigo = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
+        lblNombreT = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        lblNombre = new javax.swing.JLabel();
-        txtValor = new javax.swing.JTextField();
         lblValor = new javax.swing.JLabel();
         lblDescripcion = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
+        txtPrecioInicial = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnLimpiar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(419, 312));
@@ -45,38 +63,26 @@ public class Tratamiento extends javax.swing.JFrame {
 
         jpnlInformacion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lblCodigo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblCodigo.setText("Nombre:");
-
-        txtCodigo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCodigoKeyTyped(evt);
-            }
-        });
+        lblNombreT.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblNombreT.setText("Nombre:");
 
         txtNombre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNombre.setToolTipText("Estimado");
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombreKeyTyped(evt);
             }
         });
 
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblNombre.setText("Num. Sesiones:");
-
-        txtValor.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtValor.setToolTipText("Estimado");
-        txtValor.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtValorKeyTyped(evt);
-            }
-        });
-
-        lblValor.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblValor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblValor.setText("Precio Inicial:");
 
-        lblDescripcion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblDescripcion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblDescripcion.setText("Descripción:");
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(160, 96));
@@ -89,6 +95,19 @@ public class Tratamiento extends javax.swing.JFrame {
         txtDescripcion.setMinimumSize(new java.awt.Dimension(28, 74));
         jScrollPane1.setViewportView(txtDescripcion);
 
+        txtPrecioInicial.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPrecioInicial.setToolTipText("Estimado");
+        txtPrecioInicial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecioInicialActionPerformed(evt);
+            }
+        });
+        txtPrecioInicial.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioInicialKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpnlInformacionLayout = new javax.swing.GroupLayout(jpnlInformacion);
         jpnlInformacion.setLayout(jpnlInformacionLayout);
         jpnlInformacionLayout.setHorizontalGroup(
@@ -96,39 +115,33 @@ public class Tratamiento extends javax.swing.JFrame {
             .addGroup(jpnlInformacionLayout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNombre)
-                    .addComponent(lblCodigo)
                     .addComponent(lblDescripcion)
-                    .addComponent(lblValor))
+                    .addComponent(lblValor)
+                    .addComponent(lblNombreT))
                 .addGap(18, 18, 18)
                 .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                         .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtValor, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addComponent(txtPrecioInicial, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         jpnlInformacionLayout.setVerticalGroup(
             jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnlInformacionLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCodigo)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNombre)
+                    .addComponent(lblNombreT)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblValor)
-                    .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPrecioInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDescripcion)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete_32.png"))); // NOI18N
@@ -158,13 +171,6 @@ public class Tratamiento extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Sesión");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -173,20 +179,17 @@ public class Tratamiento extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnCancelar)
+                        .addGap(40, 40, 40))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jpnlInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE))
-                                .addGap(38, 38, 38)
-                                .addComponent(btnCancelar)))
-                        .addGap(40, 40, 40))))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jpnlInformacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,9 +198,7 @@ public class Tratamiento extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpnlInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -208,57 +209,90 @@ public class Tratamiento extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {                                   
-        // TODO add your handling code here:
-        int max = 15;
-        numeroCaracteres( evt, max, evt.getSource());
-    }                                  
-
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {                                   
         // TODO add your handling code here:
-        int max = 30;
-        char c = evt.getKeyChar();
-        
-        if(!Character.isLetter(c)){
+        int num_caracteres=20;
+        char c=evt.getKeyChar();
+        if(Character.isDigit(c)){
+            getToolkit().beep();
             evt.consume();    
-            JOptionPane.showMessageDialog(null,"Solo se admite letras" , "Validación", 
-                                                        JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Solo se admite letras" , "Validación", JOptionPane.INFORMATION_MESSAGE);
         }
-        numeroCaracteres( evt, max, evt.getSource());
+        if(txtNombre.getText().length()> num_caracteres){ // solo admite 20 caracteres
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane,"Solo 20 caracteres");
+        }
     }                                  
 
-    private void txtValorKeyTyped(java.awt.event.KeyEvent evt) {                                  
-        // TODO add your handling code here:
-        int max = 6;
-        char c = evt.getKeyChar();
-        
-        if(!Character.isDigit(c)){
-            evt.consume();
-            JOptionPane.showMessageDialog(null,"Solo se admite números" , "Validación", 
-                                                        JOptionPane.INFORMATION_MESSAGE);
-        }
-        numeroCaracteres( evt, max, evt.getSource());
-    }                                 
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        Principal_menu obj = new Principal_menu();
+        Consulta obj= new Consulta();
         dispose();
         obj.setVisible(true);
+        
+        
     }                                           
 
+    
+    public void crearTratamientoProcedure(){
+     
+        try{
+        String procedure = "{call crearTratamiento(?,?,?)}";
+        String nombre = txtNombre.getText().toUpperCase();
+        callablestatement =cn.prepareCall(procedure); //
+        
+        callablestatement.setString(1,nombre);
+        callablestatement.setDouble(2,Double.parseDouble(txtPrecioInicial.getText()));
+        callablestatement.setString(3, txtDescripcion.getText());
+        
+        callablestatement.executeUpdate();
+            System.out.println(" Tratamiento Agregado: "+txtNombre.getText());
+    }
+    catch(Exception x){
+        System.out.println("Error: "+x.getMessage());
+    }   
+    
+    }
+    
+    
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-        if( txtCodigo.getText().equals("") || txtNombre.getText().equals("") ||
-            txtValor.getText().equals("") || txtDescripcion.getText().equals("") ){
+
+        if( txtNombre.getText().equals("") || txtDescripcion.getText().equals("") ){
             JOptionPane.showMessageDialog(null, "Faltan datos por ingresar.",
                 "Error", JOptionPane.ERROR_MESSAGE);
-            txtCodigo.requestFocus();
-        }else{
-            JOptionPane.showMessageDialog(null, "Se ha registrado con exito.",
-                "Confirmación", JOptionPane.INFORMATION_MESSAGE);
-            limpiarCampos();
         }
+        else{
+            
+        
+            
+            String sql= ("Select Nombre from tratamiento where Nombre= '" + txtNombre.getText().toUpperCase() + "'");
+            String name = null;            
+                try {
+                
+                java.sql.Statement st1= cn.createStatement();
+                ResultSet rs1= st1.executeQuery(sql); 
+                while (rs1.next()){
+                 name = (rs1.getString("Nombre"));
+                 //System.out.println(name);
+                }
+                
+                        if (name!=null) {
+                            JOptionPane.showMessageDialog(null, "Tratamiento ya existe!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, "Se ha registrado con exito.","Confirmación", JOptionPane.INFORMATION_MESSAGE);
+                            crearTratamientoProcedure();
+                            limpiarCampos();
+                            dispose();            
+                            Consulta obj= new Consulta();
+                            obj.setVisible(true);
+                        }
+                }
+                catch(Exception x){
+                System.out.println("Error: "+x.getMessage());
+                JOptionPane.showMessageDialog(null, "No existen tratamientos", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+                }
+                }
     }                                          
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -266,36 +300,48 @@ public class Tratamiento extends javax.swing.JFrame {
         limpiarCampos();
     }                                          
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
-        Sesion obj = new Sesion();
-        dispose();
-        obj.setVisible(true);
-    }                                        
+    }                                         
 
-    //***************************************//
-    //***************************************//
-    //*********  F U N C I O N E S  *********//  
-    //***************************************//
-    //***************************************//
-    
-    private void numeroCaracteres( java.awt.event.KeyEvent evt,  int maximo, Object obj){
-        JTextField txt = (JTextField)obj;
+    private void txtPrecioInicialActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+        // TODO add your handling code here:
+    }                                                
+
+    private void txtPrecioInicialKeyTyped(java.awt.event.KeyEvent evt) {                                          
+        // TODO add your handling code here:
+        int num_caracteres=7;
+        int totalcaracteres = txtPrecioInicial.getText().length();
+        int decimal = totalcaracteres - 2;
+        char c=evt.getKeyChar();
+             
         
-        if ( txt.getText().length() >= maximo ){
+        if(Character.isLetter(c)){
+            getToolkit().beep();
+            evt.consume();    
+            JOptionPane.showMessageDialog(null,"No se admiten letras" , "Validación", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        /*if( c == '.'){
+            int pos=evt.getKeyLocation();  
+        if(txtPrecioInicial.getText().length() > pos+2){
+            evt.consume();    
+            JOptionPane.showMessageDialog(null,"Solo se admiten 2 decimales" , "Validación", JOptionPane.INFORMATION_MESSAGE);
+        }
+        }*/
+        
+        if(txtPrecioInicial.getText().length()> num_caracteres){ // solo admite 20 caracteres
             evt.consume();
-            JOptionPane.showMessageDialog(rootPane, "El número máximo de caracteres es "+maximo);
-            txt.requestFocus();
-        }   
+            JOptionPane.showMessageDialog(rootPane,"Solo 7 caracteres");
+        }
+    }                                         
+
+    private void limpiarCampos(){
+        txtNombre.setText("");
+        txtPrecioInicial.setText("");
+        txtDescripcion.setText("");
     }
     
-    private void limpiarCampos(){
-        txtCodigo.setText("");
-        txtNombre.setText("");
-        txtValor.setText("");
-        txtDescripcion.setText("");
-        txtCodigo.requestFocus();
-    }
     
     /**
      * @param args the command line arguments
@@ -336,17 +382,14 @@ public class Tratamiento extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel jpnlInformacion;
-    private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblDescripcion;
-    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblNombreT;
     private javax.swing.JLabel lblValor;
-    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtValor;
+    private javax.swing.JTextField txtPrecioInicial;
     // End of variables declaration                   
 }
