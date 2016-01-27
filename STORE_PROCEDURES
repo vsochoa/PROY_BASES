@@ -1,171 +1,5 @@
-Select * from paciente
-Select * from material
-Select * from consulta;
-Select * from consulta_tratamiento
-Select * from tratamiento
-
-Select * from tratamiento as t1 join (Select * from consulta_tratamiento as c right join (select ID as ID_Consultas from consulta where Paciente_CI = 0930969696 ) as p on c.Consulta_ID=p.ID_Consultas) as t2 on t1.ID=t2.Tratamiento_ID;
-
-Select * from paciente
-order by apellido;
-order by nombre
-
-DELIMITER ;;
-CREATE PROCEDURE `buscarCIPaciente`( 
-IN CEDULA char(10))
-BEGIN
-Select * from paciente
-where CI like CONCAT(CEDULA,'%');
-end;;
-DELIMITER ;
-
-DELIMITER ;;
-CREATE PROCEDURE `crearPaciente`( 
-	IN CI char(10),
-    IN Nombre varchar(45), 
-	IN Apellido varchar(45),
-	IN Sexo char(1),
-	IN FNacimiento date,
-	IN Celular varchar(12),
-	IN Direccion varchar(64),
-	IN Email varchar(64)
-)
-begin
-INSERT INTO paciente(CI,Nombre, Apellido, Sexo, FNacimiento, Celular, Direccion, Email)
-VALUES(CI,Nombre, Apellido, Sexo, FNacimiento, Celular, Direccion, Email);
-end;;
-DELIMITER ;
-
-
-DELIMITER ;;
-CREATE PROCEDURE `eliminarPaciente`( 
-	IN cedula char(10)
-)
-begin
-DELETE FROM `paciente` WHERE `CI`=cedula;
-end ;;
-DELIMITER ;
-
-DELIMITER ;;
-CREATE PROCEDURE `guardarPaciente`( 
-	IN cedula char(10),
-    IN nombre varchar(45), 
-	IN apellido varchar(45),
-	IN sexo char(1),
-	IN fNacimiento date,
-	IN celular varchar(12),
-	IN direccion varchar(64),
-	IN email varchar(64)
-)
-begin
-UPDATE paciente
-SET 
-`Nombre` = nombre,
-`Apellido` = apellido,
-`Sexo` = sexo,
-`FNacimiento` = fNacimiento,
-`Celular` = celular,
-`Direccion` = direccion,
-`Email` = email
-where `CI` = cedula;
-end ;;
-DELIMITER ;
-
-
-
--- ----------------------------------------------------------------
--- ----------------------------------------------------------------
--- ----------------------------------------------------------------
-
-##PROCEDURES MAFER CONSULTA-TRATAMIENTO
-DELIMITER ;;
-CREATE PROCEDURE `guardarTratamiento`( 
-	IN nombre varchar(45), 
-	IN PI decimal(7,2), 
-	IN descripcion varchar(200)
-)
-begin
-UPDATE tratamiento
-SET 
-`PrecioInicial` = PI,
-`Descripcion` = descripcion
-where `Nombre` = nombre;
-end ;;
-DELIMITER ;
-
-DELIMITER ;;
-CREATE PROCEDURE `crearConsulta`(
-    IN Fecha date,
-	IN Sesiones int(2),
-	IN Paciente_CI char(10)
-    )
-begin
-INSERT INTO consulta(Fecha, Sesiones, Paciente_CI)
-VALUES(Fecha, Sesiones, Paciente_CI);
-end;;
-DELIMITER ;
-
-
-DELIMITER ;;
-CREATE PROCEDURE `crearTratamiento`(
-    IN Nombre varchar(45), 
-	IN PrecioInicial decimal(7,2), 
-	IN Descripcion varchar(200)
-    )
-begin
-INSERT INTO tratamiento(Nombre, PrecioInicial, Descripcion)
-VALUES(Nombre, PrecioInicial, Descripcion);
-end;;
-DELIMITER ;
-
-
-DELIMITER ;;
-CREATE PROCEDURE `eliminarTratamiento`( 
-	IN NombreT varchar(45)
-)
-begin
-DELETE FROM `tratamiento` WHERE `Nombre`=nombreT;
-end ;;
-DELIMITER ;
-
-
-DELIMITER ;;
-CREATE PROCEDURE `crearConsultaTratamiento`(
-	IN Fecha date,
-	IN NoSesion int(11),
-    IN SesionP int(11),
-    IN Estado bit(1), 
-	IN Tratamiento_ID int(11), 
-	IN Consulta_ID int(11)
-    )
-begin
-INSERT INTO consulta_tratamiento(Fecha, NoSesion, SesionP,Estado, Tratamiento_ID, Consulta_ID)
-VALUES(Fecha, NoSesion, SesionP,Estado, Tratamiento_ID, Consulta_ID);
-end;;
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS historialClinico;
-DELIMITER ;;
-CREATE PROCEDURE `historialClinico`(
-	IN cedula char(10)
-    )
-BEGIN
-Select ct.Fecha, Nombre, NoSesion, SesionP
-from consulta_tratamiento ct 
-	join consulta c on c.ID= ct.consulta_ID
-	join tratamiento t  on t.ID=ct.Tratamiento_ID
-where c.Paciente_CI=cedula;
-END ;;
-DELIMITER ;
-
--- ----------------------------------------------------------------
--- ----------------------------------------------------------------
--- ----------------------------------------------------------------
-##Store Procedure Freddy
-DROP PROCEDURE IF EXISTS actualizarPiezaDentalProcedure;
-DELIMITER |
-CREATE PROCEDURE actualizarPiezaDentalProcedure 
-(
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizarPiezaDentalProcedure`(
 	IN Pieza int,IN Detalle varchar(256), IN Mesial BIT, IN Distal BIT, IN Octusal BIT, IN Palatino BIT,
     IN Lingual BIT, IN Vestibular BIT, IN Odontog_ID char(10) 
 )
@@ -180,98 +14,263 @@ BEGIN
             Lingual = Lingual, 
             Vestibular = Vestibular            
 	where Numero = Pieza and ID_Odontograma = Odontog_ID;
-END 
-|
+END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscarCIPaciente`(
+IN CEDULA char(10))
+BEGIN
+Select * from paciente
+where CI like CONCAT(CEDULA,'%');
+END$$
+DELIMITER ;
 
-DROP PROCEDURE IF EXISTS crearPiezaDentalProcedure;
-DELIMITER |
-CREATE PROCEDURE crearPiezaDentalProcedure 
-(
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscarNombreTratamiento`( 
+IN NOMBRE varchar(45))
+BEGIN
+Select * from tratamiento
+where Nombre like CONCAT(NOMBRE,'%');
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscarOdontPac`(
+	IN Cedula char(10)
+)
+BEGIN
+	select pa.*, od.CantPiezas as Piezas, DATE_FORMAT(od.Fecha,'%d-%m-%Y') as Fecha
+	from odontograma od
+		inner join paciente pa on ( pa.CI = od.Paciente_CI)
+	where Paciente_CI = Cedula;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearConsulta`(
+    IN Fecha date,
+	IN NoTratamientos int(2),
+	IN Paciente_CI char(10)
+    )
+begin
+INSERT INTO consulta(Fecha, NoTratamientos, Paciente_CI)
+VALUES(Fecha, NoTratamientos, Paciente_CI);
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearConsultaTratamiento`(
+	IN Fecha date,
+	IN NoSesion int(11),
+    IN SesionP int(11),
+    IN Estado bit(1), 
+	IN Tratamiento_ID int(11), 
+	IN Consulta_ID int(11)
+    )
+begin
+INSERT INTO consulta_tratamiento(Fecha, NoSesion, SesionP,Estado, Tratamiento_ID, Consulta_ID)
+VALUES(Fecha, NoSesion, SesionP,Estado, Tratamiento_ID, Consulta_ID);
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearMaterialProcedure`(
+	IN codigo varchar(10),
+    IN nombre varchar(45),
+    IN marca varchar(30),
+    IN color varchar(20), 
+    IN Paciente_CI varchar(10))
+BEGIN
+insert into material(Codigo,Nombre,Marca,Color,Paciente_CI)
+value(codigo,nombre,marca,color,Paciente_CI);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearOdontogramaProcedure`(
+	IN CantPiezas int, 
+    IN Paciente_CI char(10), 
+    OUT OdontID int  
+)
+BEGIN 
+	insert into odontograma  (CantPiezas, Fecha, Paciente_CI)
+	values (CantPiezas, DATE_FORMAT(now(),'%Y-%m-%d'), Paciente_CI);
+    
+    select id into OdontID from odontograma order by id desc limit 1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearPaciente`( 
+	IN CI char(10),
+    IN Nombre varchar(45), 
+	IN Apellido varchar(45),
+	IN Sexo char(1),
+	IN FNacimiento date,
+	IN Celular varchar(12),
+	IN Direccion varchar(64),
+	IN Email varchar(64)
+)
+begin
+INSERT INTO paciente(CI,Nombre, Apellido, Sexo, FNacimiento, Celular, Direccion, Email)
+VALUES(CI,Nombre, Apellido, Sexo, FNacimiento, Celular, Direccion, Email);
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearPagoProcedure`(
+	IN Fecha date,
+    IN FormaPago varchar(20), 
+    IN Valor decimal(7,2), 
+    IN Sesion_ID int(11),
+    OUT PagoID int
+    )
+BEGIN
+insert into pago(Fecha,FormaPago,Valor,Sesion_ID)
+values(Fecha,FormaPago,Valor,Sesion_ID);
+
+select id into PagoID from pago order by id desc limit 1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearPiezaDentalProcedure`(
 	IN Pieza int, IN Detalle varchar(256), IN Mesial BIT, IN Distal BIT, IN Octusal BIT, IN Palatino BIT,
     IN Lingual BIT, IN Vestibular BIT, IN Odontog_ID char(10) 
 )
 BEGIN 
 	insert into pieza_dental  (Numero, Detalle, Mesial, Distal, Octusal, Palatino, Lingual, Vestibular, ID_Odontograma)
 	values (Pieza, Detalle, Mesial, Distal, Octusal, Palatino, Lingual, Vestibular, Odontog_ID);
-END 
-|
+END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearSesionProcedure`(
+	IN Fecha date,
+    IN Precio decimal(7,2),
+    IN ID_Consulta_Tratamiento int(11)
+    )
+BEGIN
+insert into sesion(Fecha,Precio,ID_Consulta_Tratamiento)
+value(Fecha,Precio,ID_Consulta_Tratamiento);
+END$$
+DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearTratamiento`(
+    IN Nombre varchar(45), 
+	IN PrecioInicial decimal(7,2), 
+	IN Descripcion varchar(200)
+    )
+begin
+INSERT INTO tratamiento(Nombre, PrecioInicial, Descripcion)
+VALUES(Nombre, PrecioInicial, Descripcion);
+end$$
+DELIMITER ;
 
-DROP PROCEDURE IF EXISTS InsertarMaterialProcedure;
-DELIMITER |
-CREATE PROCEDURE InsertarMaterialProcedure(
-	IN Codigo varchar(10), IN Nombre varchar(45), IN  Marca varCHAR(30), IN Color varchar(20), 
-    IN Paciente_CI char(10) 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarPaciente`( 
+	IN cedula char(10)
 )
-BEGIN 
-insert into Material  (Codigo, Nombre, Marca, Color, Paciente_CI)
-values (Codigo, Nombre, Marca, Color, Paciente_CI);
-END 
-|
+begin
+DELETE FROM `paciente` WHERE `CI`=cedula;
+end$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarTratamiento`( 
+	IN NombreT varchar(45)
+)
+begin
+DELETE FROM `tratamiento` WHERE `Nombre`=nombreT;
+end$$
+DELIMITER ;
 
-ALTER TABLE `centroodontologico`.`factura` 
-ADD COLUMN `Telefono` VARCHAR(10) NOT NULL AFTER `Direccion`;
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `guardarPaciente`( 
+	IN cedula char(10),
+    IN nombre varchar(45), 
+	IN apellido varchar(45),
+	IN sexo char(1),
+	IN fNacimiento date,
+	IN celular varchar(12),
+	IN direccion varchar(64),
+	IN email varchar(64)
+)
+begin
+UPDATE paciente
+SET 
+`Nombre`=nombre,
+`Apellido`=apellido,
+`Sexo`=sexo,
+`FNacimiento`=fNacimiento,
+`Celular`=celular,
+`Direccion`=direccion,
+`Email`=email
+where `CI`=cedula;
+end$$
+DELIMITER ;
 
-ALTER TABLE `centroodontologico`.`factura` 
-ADD UNIQUE INDEX `Secuencia_UNIQUE` (`Secuencia` ASC);
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `guardarTratamiento`( 
+	IN nombre varchar(45), 
+	IN PI decimal(7,2), 
+	IN descripcion varchar(200)
+)
+begin
+UPDATE tratamiento
+SET 
+`PrecioInicial` = PI,
+`Descripcion` = descripcion
+where `Nombre` = nombre;
+end$$
+DELIMITER ;
 
-DROP PROCEDURE IF EXISTS InsertarFacturaProcedure;
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `historialClinico`(
+	IN cedula char(10)
+    )
+BEGIN
+Select ct.Fecha, Nombre, NoSesion, SesionP
+from consulta_tratamiento ct 
+	join consulta c on c.ID= ct.consulta_ID
+	join tratamiento t  on t.ID=ct.Tratamiento_ID
+where c.Paciente_CI=cedula;
+END$$
+DELIMITER ;
 
-ALTER TABLE `centroodontologico`.`pieza_dental` 
-CHANGE COLUMN `Detalle` `Detalle` VARCHAR(256) NOT NULL AFTER `Numero`,
-CHANGE COLUMN `Cara` `Mesial` BIT(1) NULL DEFAULT 0 ,
-ADD COLUMN `Distal` BIT(1) NULL DEFAULT 0 AFTER `Mesial`,
-ADD COLUMN `Octusal` BIT(1) NULL DEFAULT 0 AFTER `Distal`,
-ADD COLUMN `Palatino` BIT(1) NULL DEFAULT 0 AFTER `Octusal`,
-ADD COLUMN `Lingual` BIT(1) NULL DEFAULT 0 AFTER `Palatino`,
-ADD COLUMN `Vestibular` BIT(1) NULL DEFAULT 0 AFTER `Lingual`;
-
-
-DELIMITER |
-CREATE PROCEDURE InsertarFacturaProcedure(
-	IN Fecha DATE,	IN Secuencia CHAR(17), 	IN Nombre VARCHAR(50), 	IN CIRUC VARCHAR(13), 	
-    IN Direccion VARCHAR(50),	IN Telefono CHAR(11),     IN Cantidad INT,	IN Detalle VARCHAR(100),    
-    IN Nota VARCHAR(300),	IN Subtotal DECIMAL(7,2),     IN Descuento DECIMAL(7,2),	
-    IN IVA DECIMAL(7,2), 	IN Total DECIMAL(7,2), 	IN Pago_ID INT
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InformeFacturasProcedure`(
+	IN startDate DATE,	
+    IN endDate DATE, 
+    IN cedula VARCHAR(13)
 )
 BEGIN
-	insert into factura (Fecha,Secuencia,Nombre,CI_RUC,Direccion,Telefono,Cantidad,Detalle,Nota,Subtotal,Descuento,IVA,Total,Pago_ID)
-    values (Fecha,Secuencia,Nombre,CIRUC,Direccion,Telefono,Cantidad,Detalle,Nota,Subtotal,Descuento,IVA,Total,Pago_ID);
-END
-|
+	Select DATE_FORMAT(Fecha,'%d-%m-%Y') as Fecha, Secuencia, Nombre, CI_RUC, Subtotal, Descuento, IVA, Total
+    from factura 
+	where ( Fecha between startDate and endDate ) and
+		( (CASE cedula WHEN ''THEN cedula 
+            ELSE factura.CI_RUC END) = cedula );
+END$$
 DELIMITER ;
 
-
-
-#editado el 26 de enero
-ALTER TABLE `centroodontologico`.`odontograma` 
-ADD COLUMN `Fecha` DATE NOT NULL AFTER `CantPiezas`;
-
-DROP PROCEDURE IF EXISTS crearOdontogramaProcedure;
-DELIMITER ;;
-CREATE PROCEDURE crearOdontogramaProcedure(
-	IN CantPiezas int, 
-    IN Paciente_CI char(10), 
-    OUT OdontID int  
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InformeOdontogramaProcedure`(
+	IN cedula CHAR(10)
 )
-BEGIN 
-	insert into odontograma (CantPiezas, Fecha, Paciente_CI)
-	values(CantPiezas, DATE_FORMAT(now(),'%Y-%m-%d'), Paciente_CI);
-    
-    select id into OdontID from odontograma order by id desc limit 1;
-END ;;
+BEGIN
+	select pi.Numero, pi.Detalle, pi.Mesial, pi.Distal, pi.Octusal, pi.Palatino, pi.Lingual, pi.Vestibular
+    from pieza_dental pi 
+		inner join odontograma od on ( od.ID = pi.ID_Odontograma)
+        inner join paciente pa on ( pa.CI = od.Paciente_CI )
+	where od.Paciente_CI = cedula
+    order by pi.Numero;
+END$$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS InformePagosProcedure;
-DELIMITER ;;
-CREATE PROCEDURE InformePagosProcedure(
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InformePagosProcedure`(
 	IN startDate DATE,
     IN endDate DATE
 )
@@ -285,171 +284,31 @@ BEGIN
         join consulta con on ( con.ID = con_tra.Consulta_ID )
         join paciente pac on ( pac.CI = con.Paciente_CI )
 	where pa.Fecha between startDate and endDate;
-END ;;
+END$$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS InformeFacturasProcedure;
-DELIMITER ;;
-CREATE PROCEDURE InformeFacturasProcedure(
-	IN startDate DATE,	
-    IN endDate DATE, 
-    IN cedula VARCHAR(13)
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertarFacturaProcedure`(
+	IN Fecha DATE,	IN Secuencia CHAR(17), 	IN Nombre VARCHAR(50), 	IN CIRUC VARCHAR(13), 	
+    IN Direccion VARCHAR(50),	IN Telefono CHAR(11),     IN Cantidad INT,	IN Detalle VARCHAR(100),    
+    IN Nota VARCHAR(300),	IN Subtotal DECIMAL(7,2),     IN Descuento DECIMAL(7,2),	
+    IN IVA DECIMAL(7,2), 	IN Total DECIMAL(7,2), 	IN Pago_ID INT
 )
 BEGIN
-	Select DATE_FORMAT(Fecha,'%d-%m-%Y') as Fecha, Secuencia, Nombre, CI_RUC, Subtotal, Descuento, IVA, Total
-    from factura 
-	where ( Fecha between startDate and endDate ) and
-		( (CASE cedula WHEN ''THEN cedula 
-            ELSE factura.CI_RUC END) = cedula );
-END ;;
+	insert into factura (Fecha,Secuencia,Nombre,CI_RUC,Direccion,Telefono,Cantidad,Detalle,Nota,Subtotal,Descuento,IVA,Total,Pago_ID)
+    values (Fecha,Secuencia,Nombre,CIRUC,Direccion,Telefono,Cantidad,Detalle,Nota,Subtotal,Descuento,IVA,Total,Pago_ID);
+END$$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS InformeOdontogramaProcedure;
-DELIMITER ;;
-CREATE PROCEDURE InformeOdontogramaProcedure(
-	IN cedula CHAR(10)
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertarMaterialProcedure`(
+	IN Codigo varchar(10), IN Nombre varchar(45), IN  Marca varCHAR(30), IN Color varchar(20), 
+    IN Paciente_CI char(10) 
 )
-BEGIN
-	select pi.Numero, pi.Detalle, pi.Mesial, pi.Distal, pi.Octusal, pi.Palatino, pi.Lingual, pi.Vestibular
-    from pieza_dental pi 
-		inner join odontograma od on ( od.ID = pi.ID_Odontograma)
-        inner join paciente pa on ( pa.CI = od.Paciente_CI )
-	where od.Paciente_CI = cedula
-    order by pi.Numero;
-END ;;
+BEGIN 
+
+insert into Material  (Codigo, Nombre, Marca, Color, Paciente_CI)
+values (Codigo, Nombre, Marca, Color, Paciente_CI);
+
+END$$
 DELIMITER ;
-
-
-DROP PROCEDURE IF EXISTS buscarOdontPac;
-DELIMITER |
-CREATE PROCEDURE buscarOdontPac
-(
-	IN Cedula char(10)
-)
-BEGIN
-	select pa.*, od.CantPiezas as Piezas, DATE_FORMAT(od.Fecha,'%d-%m-%Y') as Fecha
-	from odontograma od
-		inner join paciente pa on ( pa.CI = od.Paciente_CI)
-	where Paciente_CI = Cedula;
-END
-|
-DELIMITER ;
-
--- ----------------------------------------------------------------
--- ----------------------------------------------------------------
--- ----------------------------------------------------------------
-##Store Procedure DAVIDA SALAZAR
-
-/*TRIGGER PARA REDUCIR SESION PENDIENTE:*/
-DROP TRIGGER IF EXISTS Reducir_SesionP;
-DELIMITER |
-
-CREATE TRIGGER Reducir_SesionP after INSERT ON sesion
-  FOR EACH ROW BEGIN
-  Update consulta_tratamiento set SesionP=SesionP-1 where ID=new.ID_Consulta_Tratamiento;
-  if (SELECT max(SesionP) FROM consulta_tratamiento where id=new.ID_Consulta_Tratamiento) = 0 then
-	Update consulta_tratamiento set estado=1 where ID=new.ID_Consulta_Tratamiento;
-  end if;
-  END
-|
-DELIMITER ;
-
-
-/*PROCEDURE CREAR PAGO:*/
-DELIMITER ;;
-CREATE PROCEDURE `crearPagoProcedure`(
-	IN Fecha date,
-    IN FormaPago varchar(20), 
-    IN Valor decimal(7,2), 
-    IN Sesion_ID int(11)
-    )
-BEGIN
-insert into pago(Fecha,FormaPago,Valor,Sesion_ID)
-values(Fecha,FormaPago,Valor,Sesion_ID);
-END ;;
-DELIMITER ;
-
-
-/*PROCEDURE CREAR SESION */
-DELIMITER ;;
-CREATE PROCEDURE `crearSesionProcedure`(
-	IN Fecha date,
-    IN Precio decimal(7,2),
-    IN ID_Consulta_Tratamiento int(11)
-    )
-BEGIN
-insert into sesion(Fecha,Precio,ID_Consulta_Tratamiento)
-value(Fecha,Precio,ID_Consulta_Tratamiento);
-END ;;
-DELIMITER ;
-
-
-/*PROCEDURE CREAR MATERIAL*/
-DELIMITER ;;
-CREATE PROCEDURE `crearMaterialProcedure`(
-	IN codigo varchar(10),
-    IN nombre varchar(45),
-    IN marca varchar(30),
-    IN color varchar(20), 
-    IN Paciente_CI varchar(10))
-BEGIN
-insert into material(Codigo,Nombre,Marca,Color,Paciente_CI)
-value(codigo,nombre,marca,color,Paciente_CI);
-END ;;
-DELIMITER ;
-
-
-
-
-/*Ingreso de pacientes a las tablas*/ 
-insert into Paciente (CI,Nombre, Apellido, Sexo, FNacimiento, Celular, Direccion, Email)
-values  ('0939202039','David Steven','Salazar Villegas','M', '1995-01-29', '0987656784', 'Luque y Garcia Aviles', 'davicho11@hotmail.com' );
-call crearPaciente('0703994821','Veronica Ximena','Ochoa Guaman','F', '1993-07-19', '0999656780', 'Alborada X etapa mz 11 V 9', 'veritoprincesa@hotmail.com' );
-call crearPaciente('0564723820','Freddy Leonardo','Plaza Peña','M', '1991-02-14', '0990856017', 'Ciudad Celeste mz 110 v 15', 'freddysp@hotmail.com' );
-call crearPaciente('0384930191','Maria Fernanda','Alvarado Mora','F', '1996-02-14', '0901948019', 'Guayacanes mz 29 v 18', 'maferaam@hotmail.com' );
-call crearPaciente('0748392057','Vanessa Ivonne','Echeverria de Silva','F', '1980-09-14', '0967948407', 'Barrio Centenario mz 15 v 7', 'vivonne@hotmail.com' );
-
-insert into Paciente values  ('0888888888', 'Pupito','Moran V','M', '2015-10-03','0987654321', 'Norte de Guayaquil', 'pupmoran@espol.edu.ec' );
-insert into Paciente values  ('0777777777', 'Pedro','Lozano Ruiz','M', '1989-07-12','0909917765', 'Urdesa Central', 'pedroRuiz@gmail.com' );
-insert into Paciente values  ('0666666666', 'Lupe','Garcia','F', '1992-06-02','0980387657', 'Orquideas Mz.34 Solar 8', 'lupeGarcia@gmail.com' );
-
-/*Ingreso de tratamento a las tablas*/ 
-call crearTratamiento('LIMPIEZA','20','Precio referencial');
-call crearTratamiento('EXTRACCION','10','Precio referencial de diente');
-call crearTratamiento('CURACION','10','Precio puede variar dependiendo la pieza');
-call crearTratamiento('ORTODONCIA','1000', 'Precio referencial');
-call crearTratamiento('SABIO CONDUCTO','50', 'Precio referencial');
-
-
-/*Ingreso de datos a la tabla Consulta*/
-call crearConsulta ('2016-01-15',2,'0384930191');
-call crearConsulta ('2016-01-12',1,'0564723820');
-call crearConsulta ('2016-01-13',3,'0703994821');
-call crearConsulta ('2016-01-12',1,'0748392057');
-call crearConsulta ('2016-01-14',2,'0939202039');
-
-
-/*Ingreso de datos a la tabla Consulta_Tratamiento*/
-call crearConsultaTratamiento ('2016-01-15',2,2,0,1,7);
-call crearConsultaTratamiento('2016-01-12',1,1,0,2,4);
-call crearConsultaTratamiento('2016-01-13',3,3,0,3,5);
-call crearConsultaTratamiento('2016-01-12',1,1,0,4,1);
-call crearConsultaTratamiento('2016-01-14',2,2,0,5,3);
-
-
-/*Ingreso de datos a la tabla Sesion*/
-insert into sesion values ('2016-01-10', 11.20, 1);
-insert into sesion values ('2016-01-15', 15.00, 4);
-insert into sesion values ('2016-01-12', 17.50, 5);
-insert into sesion values ('2016-01-13', 24.00, 6);
-insert into sesion values ('2016-01-12', 12.50, 7);
-
-
-/*Ingreso de datos a la tabla Pago*/
-insert into pago values ('2016-01-10', 'EFECTIVO', 11.20, 1);
-insert into pago values ('2016-01-15', 'T/C', 11.20, 3);
-insert into pago values ('2016-01-12', 'CHEQUE', 11.20, 5);
-insert into pago values ('2016-01-13', 'EFECTIVO', 11.20, 7);
-insert into pago values ('2016-01-12', 'EFECTIVO', 11.20, 9);
