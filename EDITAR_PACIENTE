@@ -1,0 +1,518 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package centro_odontologico;
+
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import Conexion.Conexion;
+import Report.Reportes;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
+/**
+ *
+ * @author Raquel
+ */
+public class EditarPaciente extends javax.swing.JFrame {
+    DefaultTableModel modelo;
+    Statement sent;
+    CallableStatement callablestatement = null; //acceder a la base por store procedure
+    PreparedStatement pst = null;
+    
+    Conexion xd = new Conexion();
+    Connection cn = xd.conexion();
+        
+    public EditarPaciente() {
+        initComponents();
+        cargar();
+        setTitle("EDITAR-PACIENTE");
+        setLocationRelativeTo(null);
+        setResizable(false);
+        btnEliminar.setVisible(false);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablePaciente = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btnGuardar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtCedula = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnVerTodo = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tablePaciente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Nombre", "Apellido", "Edad", "CI", "Sexo", "Fecha Nacimiento", "Telefono", "Dirección", "Mail"
+            }
+        ));
+        tablePaciente.setDragEnabled(true);
+        jScrollPane1.setViewportView(tablePaciente);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addGap(19, 19, 19))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 19, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("CENTRO ODONTOLOGICO");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Paciente");
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnReporte.setText("Reporte");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Buscar por cédula:");
+
+        txtCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaActionPerformed(evt);
+            }
+        });
+        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaKeyTyped(evt);
+            }
+        });
+
+        jButton2.setText("OK");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        btnVerTodo.setText("Ver todo");
+        btnVerTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnVerTodo)
+                                .addGap(188, 188, 188)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(64, 64, 64)
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61)
+                .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(98, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(btnVerTodo))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2)))
+                .addGap(30, 30, 30)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31))
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        int fila= tablePaciente.getSelectedRow();
+        int opcion=JOptionPane.showConfirmDialog(null, "¿Esta seguro de  eliminar Paciente " +tablePaciente.getValueAt(fila, 2), "GUARDAR", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+        if(opcion==JOptionPane.YES_OPTION)
+            eliminarPacienteProcedure();
+    }                                           
+
+    private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    }                                         
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        buscarCedula();        
+    }                                        
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        int fila= tablePaciente.getSelectedRow();
+         if (fila==-1){
+         JOptionPane.showMessageDialog(null,"No se ha seleccionado paciente alguno " ,"Mensaje del sistema", JOptionPane.WARNING_MESSAGE); 
+        
+        }else{
+        
+        int opcion=JOptionPane.showConfirmDialog(null, "¿Esta seguro de  guardar los cambios", "GUARDAR", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+        if(opcion==JOptionPane.YES_OPTION)
+            guardarPacienteProcedure();
+        }
+    }                                          
+
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        generareporte();
+    }                                          
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        Principal_menu a = new Principal_menu();
+        a.setVisible(true);
+        dispose();
+    }                                           
+
+    private void btnVerTodoActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        cargar();
+    }                                          
+
+    private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {                                   
+        int num_caracteres = 10;
+        char c= evt.getKeyChar();
+        if(Character.isLetter(c)){
+            getToolkit().beep();
+            evt.consume();    
+            JOptionPane.showMessageDialog(null,"Solo se admite números" , "Validación", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        if(txtCedula.getText().length()== num_caracteres){ // solo admite 10 caracteres
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane,"Solo 10 caracteres");
+        }
+    }                                  
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new EditarPaciente().setVisible(true);
+            
+            }
+        });
+    }
+    
+    public void buscarCedula(){
+     String [] titulos={"CI","Nombre","Apellido","Sexo","Fecha Nacimiento","Teléfono","Dirección","Mail"};
+     String [] registros= new String[8];
+     String procedure = "{call buscarCIPaciente(?)}"; //DEFINIDO EL PROCEDURE
+     modelo = new DefaultTableModel(null, titulos);     
+            
+            try {                           
+                callablestatement =cn.prepareCall(procedure);
+                callablestatement.setString(1,txtCedula.getText());  
+                ResultSet rs= callablestatement.executeQuery();//se pone sin nada adentro del executeQuery() cuando se usa estore procedure
+                while (rs.next()){
+                    registros[0]= rs.getString("CI");
+                    registros[1]= rs.getString("Nombre");
+                    registros[2]= rs.getString("Apellido");
+                    registros[3]= rs.getString("Sexo");
+                    registros[4]= rs.getString("FNacimiento");
+                    registros[5]= rs.getString("Celular");
+                    registros[6]= rs.getString("Direccion");
+                    registros[7]= rs.getString("Email");
+                    modelo.addRow(registros);
+                    tablePaciente.setModel(modelo);    
+                }
+                if(registros[0]==null){
+                    JOptionPane.showMessageDialog(null,"No se ha encontrado ningun Paciente con cedula: " + txtCedula.getText(),"Mensaje del sistema", JOptionPane.WARNING_MESSAGE); 
+                    tablePaciente.setModel(modelo);  
+                }            
+            }catch (SQLException ex){
+                JOptionPane.showMessageDialog(null, ex);
+            }
+    }
+    
+    public void cargar(){
+        String [] titulos={"CI","Nombre","Apellido","Sexo","Fecha Nacimiento","Teléfono","Dirección","Mail"};
+        String [] registros= new String[8];
+        String sql= "Select * from paciente";
+        modelo = new DefaultTableModel(null, titulos);
+        try{
+            Statement st= cn.createStatement();
+            ResultSet rs= st.executeQuery(sql);
+            while (rs.next()) {
+                registros[0]= rs.getString("CI");
+                registros[1]= rs.getString("Nombre");
+                registros[2]= rs.getString("Apellido");
+                registros[3]= rs.getString("Sexo");
+                registros[4]= rs.getString("FNacimiento");
+                registros[5]= rs.getString("Celular");
+                registros[6]= rs.getString("Direccion");
+                registros[7]= rs.getString("Email");
+                modelo.addRow(registros);
+                tablePaciente.setModel(modelo);    
+            }
+        }catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+        public void cargarVista(){
+        String [] titulos={"CI","Nombre","Apellido","Sexo","Fecha Nacimiento","Teléfono","Dirección","Mail"};
+        String [] registros= new String[8];
+        String sql= "Call consultapaciente()";
+        modelo = new DefaultTableModel(null, titulos);
+        try{
+            Statement st= cn.createStatement();
+            ResultSet rs= st.executeQuery(sql);
+            while (rs.next()) {
+                registros[0]= rs.getString("CI");
+                registros[1]= rs.getString("Nombre");
+                registros[2]= rs.getString("Apellido");
+                registros[3]= rs.getString("Sexo");
+                registros[4]= rs.getString("FNacimiento");
+                registros[5]= rs.getString("Celular");
+                registros[6]= rs.getString("Direccion");
+                registros[7]= rs.getString("Email");
+                modelo.addRow(registros);
+                tablePaciente.setModel(modelo);    
+            }
+        }catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+          
+    public void eliminarPacienteProcedure(){
+        try{
+            int fila= tablePaciente.getSelectedRow();
+            String procedure = "{call eliminarPaciente(?)}"; //DEFINIDO EL PROCEDURE
+            callablestatement =cn.prepareCall(procedure); //prepara la llamada al procedure
+        
+            callablestatement.setString(1, (String) tablePaciente.getValueAt(fila, 0));
+            int n=callablestatement.executeUpdate();//se lo usa en SQL INSERT, UPDATE o DELETE
+            //cuando no lo encuentra retorna 0 o sino retorna 1
+            System.out.println((String) tablePaciente.getValueAt(fila, 0));
+            System.out.println(n);
+            if (n>0) {
+                    cargar();
+                    JOptionPane.showMessageDialog(null, "Paciente eliminado!!!");
+            }
+            cargar();
+        }
+        catch(Exception x){
+        JOptionPane.showMessageDialog(null,"Error al Eliminar" + x.getMessage());
+    }
+    }
+    
+    
+    
+    public void guardarPacienteProcedure(){
+        int fila= tablePaciente.getSelectedRow();
+        try {
+            String procedure="{call guardarPaciente(?,?,?,?,?,?,?,?)}"; //DEFINIDO EL PROCEDURE
+            callablestatement = cn.prepareCall(procedure);
+            String ci=  (String) tablePaciente.getValueAt(fila, 0);
+            
+            callablestatement.setString(1, ci);
+            callablestatement.setString(2, (String) tablePaciente.getValueAt(fila, 1));
+            callablestatement.setString(3, (String) tablePaciente.getValueAt(fila, 2));
+            callablestatement.setString(4, (String) tablePaciente.getValueAt(fila, 3));
+            callablestatement.setString(5, (String) tablePaciente.getValueAt(fila, 4));
+            callablestatement.setString(6, (String) tablePaciente.getValueAt(fila, 5));
+            callablestatement.setString(7, (String) tablePaciente.getValueAt(fila, 6));
+            callablestatement.setString(8, (String) tablePaciente.getValueAt(fila, 7));
+            
+            callablestatement.executeUpdate();
+            cargar();
+            //bloquear();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
+        }
+    }
+    
+    private void generareporte() {
+        try {
+            Reportes re = new Reportes();
+            re.reporteFacturas("PACIENTE");
+        }catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, "Error en Informe",
+                "ERROR", JOptionPane.ERROR_MESSAGE);
+        }catch (SQLException sqle) {
+            JOptionPane.showMessageDialog(null, "Código de Error: " + sqle.getErrorCode() + "\n" +
+                    "Estado de Error: " + sqle.getSQLState() + "\n" + 
+                    "Mensaje de Error: " + sqle.getMessage(),
+                    "Advertencia", JOptionPane.ERROR_MESSAGE);
+        } 
+    }
+    
+    
+    //    public void eliminar(){  //ELIMINAR PACIENTE SIN PROCEDURE
+//            Conexion cc= new Conexion();
+//            Connection cn= cc.conexion();
+//            try {
+//                int fila= tablePaciente.getSelectedRow();
+//                String sql = "DELETE from paciente WHERE CI="+tablePaciente.getValueAt(fila, 1);
+//                sent= cn.createStatement();
+//                int n= sent.executeUpdate(sql);
+//                if (n>0) {
+//                    cargar();
+//                    JOptionPane.showMessageDialog(null, "Datos Eliminados!!!");
+//                }
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(null,"Error al Eliminar" + e.getMessage());
+//            }
+//    }
+    
+    
+    
+    
+    
+//        public void guardar(){ //GUARDAR PACIENTE SIN PROCEDURE
+//
+//        int fila= tablePaciente.getSelectedRow();
+//        try {
+//            
+//            System.out.println(""+tablePaciente.getValueAt(fila, 0)
+//                    +"\n"+tablePaciente.getValueAt(fila, 1)+"\n"
+//                    +tablePaciente.getValueAt(fila, 2)+"\n"
+//            +tablePaciente.getValueAt(fila, 3)+"\n"
+//            +tablePaciente.getValueAt(fila, 4)+"\n"
+//            +tablePaciente.getValueAt(fila, 5)+"\n"
+//            +tablePaciente.getValueAt(fila, 6)+"\n"
+//            +tablePaciente.getValueAt(fila, 7)+"\n"
+//            +tablePaciente.getValueAt(fila, 8)+"\n");
+//            
+//            String ci=  (String) tablePaciente.getValueAt(fila, 3);
+//            
+//            PreparedStatement pst= cn.prepareStatement("UPDATE paciente SET CI='"+tablePaciente.getValueAt(fila, 0) 
+//                    +"',Nombre='" +tablePaciente.getValueAt(fila, 1)
+//                    +"',Apellido='" +tablePaciente.getValueAt(fila, 2)
+//                    +"',Sexo='" +tablePaciente.getValueAt(fila, 3)
+//                    +"',FNacimiento='" +tablePaciente.getValueAt(fila, 4)
+//                    +"',Celular='" +tablePaciente.getValueAt(fila, 5)
+//                    +"',Direccion='" +tablePaciente.getValueAt(fila, 6)
+//                    +"',Email='" +tablePaciente.getValueAt(fila, 7)
+//                    +"' WHERE CI='"+ci+"'");
+//            pst.executeUpdate();
+//            cargar();
+//            //bloquear();
+//        } catch (Exception e) {
+//        JOptionPane.showMessageDialog(null, "ERROR"+ e);
+//        }
+//    }
+    
+    
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnReporte;
+    private javax.swing.JButton btnVerTodo;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tablePaciente;
+    private javax.swing.JTextField txtCedula;
+    // End of variables declaration                   
+}
