@@ -1,20 +1,77 @@
+
+package centro_odontologico;
+
+import Conexion.Conexion;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
+/**
+ *
+ * @author Raquel
+ */
 public class Pago extends javax.swing.JFrame {
-
+    int pagoID=0;
+    String valor=null;
+    Statement sent;
+    CallableStatement callablestatement =null;
+    Conexion xd =new Conexion();
+    Connection cn = xd.conexion();
+    
+    
     /**
      * Creates new form Pago
      */
     public Pago() {
         initComponents();
+        Calendar c= new GregorianCalendar();
+        jDate.setCalendar(c);
+        
         setTitle("PAGO");
+        this.FormaPagoBox.addItem("Efectivo");
+        this.FormaPagoBox.addItem("T/C");
         Dimension pantalla, cuadro;
         pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         cuadro = this.getSize();
         this.setLocation(((pantalla.width - cuadro.width)/2), (pantalla.height - cuadro.height)/2);
+        
+        
+        System.out.println(consultar_IDSesion());
+        
+        
     }
+    
+    public Pago(String pago) {
+        initComponents();
+        Calendar c= new GregorianCalendar();
+        jDate.setCalendar(c);
+        
+        setTitle("PAGO");
+        this.FormaPagoBox.addItem("Efectivo");
+        this.FormaPagoBox.addItem("T/C");
+       
+        Dimension pantalla, cuadro;
+        pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        cuadro = this.getSize();
+        this.setLocation(((pantalla.width - cuadro.width)/2), (pantalla.height - cuadro.height)/2);
+        
+        txt_total_pago.setEnabled(false);
+        txt_total_pago.setText(pago);
+        
+        System.out.println(consultar_IDSesion());
+        
+        
+    }
+
 
    
     @SuppressWarnings("unchecked")
@@ -23,14 +80,14 @@ public class Pago extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        button_limpiar = new javax.swing.JButton();
         button_guardar = new javax.swing.JButton();
-        button_cancelar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txt_total_pago = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txt_id_sesion = new javax.swing.JTextField();
+        FormaPagoBox = new javax.swing.JComboBox();
+        lblCodigo = new javax.swing.JLabel();
+        jDate = new com.toedter.calendar.JDateChooser();
 
         jLabel1.setText("jLabel1");
 
@@ -39,27 +96,11 @@ public class Pago extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Pago");
 
-        button_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/trash_32.png"))); // NOI18N
-        button_limpiar.setText("Limpiar");
-        button_limpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_limpiarActionPerformed(evt);
-            }
-        });
-
         button_guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save_32.png"))); // NOI18N
-        button_guardar.setText("Guardar");
+        button_guardar.setText("ACEPTAR");
         button_guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_guardarActionPerformed(evt);
-            }
-        });
-
-        button_cancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete_32.png"))); // NOI18N
-        button_cancelar.setText("Cancelar");
-        button_cancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_cancelarActionPerformed(evt);
             }
         });
 
@@ -80,16 +121,21 @@ public class Pago extends javax.swing.JFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel5.setText("Tipo de pago:");
+        jLabel5.setText("Forma de pago:");
 
-        txt_id_sesion.addActionListener(new java.awt.event.ActionListener() {
+        FormaPagoBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_id_sesionActionPerformed(evt);
+                FormaPagoBoxActionPerformed(evt);
             }
         });
-        txt_id_sesion.addKeyListener(new java.awt.event.KeyAdapter() {
+
+        lblCodigo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblCodigo.setText("Fecha:");
+
+        jDate.setDateFormatString("dd-MM-yyyy");
+        jDate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txt_id_sesionKeyTyped(evt);
+                jDateKeyTyped(evt);
             }
         });
 
@@ -101,25 +147,31 @@ public class Pago extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(lblCodigo))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_id_sesion)
-                    .addComponent(txt_total_pago, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(FormaPagoBox, 0, 187, Short.MAX_VALUE)
+                    .addComponent(txt_total_pago)
+                    .addComponent(jDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblCodigo)
+                    .addComponent(jDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txt_id_sesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                    .addComponent(FormaPagoBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_total_pago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -127,39 +179,31 @@ public class Pago extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(button_limpiar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(button_guardar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(button_cancelar))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(0, 25, Short.MAX_VALUE))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(button_guardar)))
+                .addGap(0, 36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button_limpiar)
-                    .addComponent(button_guardar)
-                    .addComponent(button_cancelar))
-                .addGap(46, 46, 46))
+                .addGap(18, 18, 18)
+                .addComponent(button_guardar)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>                        
-
-    private void button_limpiarActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
 
     private void txt_total_pagoActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
@@ -167,42 +211,47 @@ public class Pago extends javax.swing.JFrame {
 
     private void button_guardarActionPerformed(java.awt.event.ActionEvent evt) {                                               
                 // TODO add your handling code here:
-        if( txt_id_sesion.getText().equals("") || txt_total_pago.getText().equals("") ){
+        if(  txt_total_pago.getText().equals("") ){
             JOptionPane.showMessageDialog(null, "Faltan datos por ingresar.",
                 "Error", JOptionPane.ERROR_MESSAGE);
-            txt_id_sesion.requestFocus();
         }else{
-            JOptionPane.showMessageDialog(null, "Se ha registrado con exito.",
-                "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+            valor=txt_total_pago.getText();
+            crearPagoProcedure();
+            
             limpiarCampos();
+            int opcion1=JOptionPane.showConfirmDialog(null, "¿Desea una factura?","",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+            if(opcion1==JOptionPane.YES_OPTION){
+                Factura obj = new Factura(pagoID,valor);
+                obj.setVisible(true);   
+                dispose();
+                }
         }
+       
     }                                              
 
-    private void txt_id_sesionActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        
-    }                                             
-
-    private void txt_id_sesionKeyTyped(java.awt.event.KeyEvent evt) {                                       
-        char c= evt.getKeyChar();
-        if(!Character.isDigit(c)){
-        evt.consume();    
-        JOptionPane.showMessageDialog(null,"Solo se admite números" , "Validación", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }                                      
-
     private void txt_total_pagoKeyTyped(java.awt.event.KeyEvent evt) {                                        
-        char c= evt.getKeyChar();
-        if(!Character.isDigit(c)){
-        evt.consume();    
-        JOptionPane.showMessageDialog(null,"Solo se admite números" , "Validación", JOptionPane.INFORMATION_MESSAGE);
+        int num_caracteres = 5;
+        char c=evt.getKeyChar(); 
+        if(Character.isLetter(c)) { 
+              getToolkit().beep(); 
+              evt.consume();
+              JOptionPane.showMessageDialog(null,"Solo se admite numeros" , "Validación", JOptionPane.ERROR_MESSAGE);
+          } 
+
+        if(txt_total_pago.getText().length()> num_caracteres){ // solo admite 10 caracteres
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane,"Solo 5 caracteres");
         }
+ 
     }                                       
 
-    private void button_cancelarActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        Principal_menu obj = new Principal_menu();
-        dispose();
-        obj.setVisible(true);
-    }                                               
+    private void FormaPagoBoxActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        // TODO add your handling code here:
+    }                                            
+
+    private void jDateKeyTyped(java.awt.event.KeyEvent evt) {                               
+        // TODO add your handling code here:
+    }                              
 
     /**
      * @param args the command line arguments
@@ -240,20 +289,80 @@ public class Pago extends javax.swing.JFrame {
     }
     
     private void limpiarCampos(){
-        txt_id_sesion.setText("");
+       
         txt_total_pago.setText("");
     }
+    
+    
+    
+   //SELECCIONA EL ULTIMO ID DE LAS SESIONES CREADAS
+   public int consultar_IDSesion(){
+   
+   String sql= " SELECT MAX(ID) FROM sesion";
+   int ultimoID=1;
+   Conexion cc= new Conexion();
+   Connection cn= cc.conexion();
+   try {
+            java.sql.Statement st= cn.createStatement();
+            ResultSet rs= st.executeQuery(sql);
+             while (rs.next()) {
+                 ultimoID=Integer.parseInt(rs.getString(1)); 
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+            
+        }
+   return ultimoID;
+   }
+    
+    
+    
+   public void crearPagoProcedure(){
+       Date date = jDate.getDate();
+       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+       int ID_Sesion= consultar_IDSesion();
+       String forma = (String) FormaPagoBox.getSelectedItem();
+      
+        try{
+        String procedure = "{call crearPagoProcedure(?,?,?,?,?)}";
+        callablestatement =cn.prepareCall(procedure); //
+        
+        callablestatement.setString(1,sdf.format(date));
+        callablestatement.setString(2,forma);
+        callablestatement.setDouble(3,Double.parseDouble(txt_total_pago.getText()));
+        callablestatement.setInt(4,ID_Sesion);
+        callablestatement.registerOutParameter(5, java.sql.Types.INTEGER);
+        callablestatement.executeUpdate();
+           
+        pagoID = callablestatement.getInt(5);
+        
+        
+        JOptionPane.showMessageDialog(null, "Se ha registrado con exito."  ,"Confirmación", JOptionPane.INFORMATION_MESSAGE);
+  
+        }
+    catch(Exception x){
+        System.out.println("Error: "+x.getMessage());
+    }   
+    
+    }
+    
+    
+    
+   
+   
+   
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton button_cancelar;
+    private javax.swing.JComboBox FormaPagoBox;
     private javax.swing.JButton button_guardar;
-    private javax.swing.JButton button_limpiar;
+    private com.toedter.calendar.JDateChooser jDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txt_id_sesion;
+    private javax.swing.JLabel lblCodigo;
     private javax.swing.JTextField txt_total_pago;
     // End of variables declaration                   
 }
