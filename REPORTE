@@ -1,0 +1,64 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Report;
+
+import Conexion.Conexion;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.HashMap;
+
+import net.sf.jasperreports.engine.*;
+//import net.sf.jasperreports.engine.JRExporter;
+//import net.sf.jasperreports.engine.JRException;
+//import net.sf.jasperreports.engine.JRExporterParameter;
+//import net.sf.jasperreports.engine.JasperFillManager;
+//import net.sf.jasperreports.engine.JasperPrint;
+//import net.sf.jasperreports.engine.JasperReport;
+//import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
+/**
+ *
+ * @author FREDDY
+ */
+public class Reportes {
+        
+    public void reporteFacturas( String tipo ) throws JRException,SQLException{
+        
+        Conexion xd = new Conexion();
+        Connection cn = xd.conexion();
+        
+        JasperReport reporte = null;
+        
+        if ( tipo.equals("FACTURA") )
+                reporte = (JasperReport) JRLoader.loadObjectFromFile("src\\Report\\Inf_Facturas.jasper");
+        if ( tipo.equals("PAGO") )
+                reporte = (JasperReport) JRLoader.loadObjectFromFile("src\\Report\\Inf_Pagos.jasper");
+        if ( tipo.equals("PACIENTE") )
+                reporte = (JasperReport) JRLoader.loadObjectFromFile("src\\Report\\reportePaciente.jasper");
+        if ( tipo.equals("TRATAMIENTO") )
+                reporte = (JasperReport) JRLoader.loadObjectFromFile("src\\Report\\reporteTratamientos.jasper");
+        if ( tipo.equals("HISTORIAL") )
+                reporte = (JasperReport) JRLoader.loadObjectFromFile("src\\Report\\historialClinico.jasper");
+        
+        JasperPrint jasperPrint = JasperFillManager.fillReport( reporte, new HashMap(), cn );
+        JasperViewer.viewReport(jasperPrint, false);
+        
+//        JasperViewer ver = new JasperViewer(jasperPrint);
+//        
+//        ver.setTitle("I N F O R M E");
+//        ver.setVisible(true);
+
+//        JRExporter exporter = new JRPdfExporter();
+//        
+//        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+//        exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("reportePDF.pdf"));
+//        exporter.exportReport();   
+    }
+    
+}
