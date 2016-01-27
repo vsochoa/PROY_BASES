@@ -312,3 +312,4 @@ values (Codigo, Nombre, Marca, Color, Paciente_CI);
 
 END$$
 DELIMITER ;
+
