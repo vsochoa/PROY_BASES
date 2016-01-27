@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f2b35bd8-6f05-4ca9-aa4a-3a98e1af9fe9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     paciente.`CI` AS paciente_CI,
+     paciente.`Nombre` AS paciente_Nombre,
+     paciente.`Apellido` AS paciente_Apellido,
+     paciente.`Sexo` AS paciente_Sexo,
+     paciente.`FNacimiento` AS paciente_FNacimiento,
+     paciente.`Celular` AS paciente_Celular,
+     paciente.`Direccion` AS paciente_Direccion,
+     paciente.`Email` AS paciente_Email,
+     consulta.`Fecha` AS consulta_Fecha,
+     consulta_tratamiento.`NoSesion` AS consulta_tratamiento_NoSesion,
+     consulta_tratamiento.`SesionP` AS consulta_tratamiento_SesionP,
+     tratamiento.`Nombre` AS tratamiento_Nombre
+FROM
+     `paciente` paciente INNER JOIN `consulta` consulta ON paciente.`CI` = consulta.`Paciente_CI`
+     INNER JOIN `consulta_tratamiento` consulta_tratamiento ON consulta.`ID` = consulta_tratamiento.`Consulta_ID`
+     INNER JOIN `tratamiento` tratamiento ON consulta_tratamiento.`Tratamiento_ID` = tratamiento.`ID`]]>
+	</queryString>
+	<field name="paciente_CI" class="java.lang.String"/>
+	<field name="paciente_Nombre" class="java.lang.String"/>
+	<field name="paciente_Apellido" class="java.lang.String"/>
+	<field name="paciente_Sexo" class="java.lang.String"/>
+	<field name="paciente_FNacimiento" class="java.sql.Date"/>
+	<field name="paciente_Celular" class="java.lang.String"/>
+	<field name="paciente_Direccion" class="java.lang.String"/>
+	<field name="paciente_Email" class="java.lang.String"/>
+	<field name="consulta_Fecha" class="java.sql.Date"/>
+	<field name="consulta_tratamiento_NoSesion" class="java.lang.Integer"/>
+	<field name="consulta_tratamiento_SesionP" class="java.lang.Integer"/>
+	<field name="tratamiento_Nombre" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="112" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="52e8ee1a-609e-4c2d-a518-22299dda0728" x="85" y="13" width="382" height="29" forecolor="#000000" backcolor="#009999"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="20" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[SISTEMA ODONTOLOGICO INTEGRAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd4d60fa-f1f3-457f-98d0-a9b366ecee48" x="143" y="53" width="280" height="52" forecolor="#0033FF"/>
+				<textElement>
+					<font fontName="Brush Script MT" size="30"/>
+				</textElement>
+				<text><![CDATA[Consultorio dental "Jarem"]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="52e8ee1a-609e-4c2d-a518-22299dda0728" mode="Opaque" x="0" y="0" width="555" height="29" forecolor="#000000" backcolor="#FF9933"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="16" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Historial Clinico de Paciente]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="159" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="0" y="12" width="53" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="53" y="12" width="159" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_Nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="248" y="11" width="53" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apellido:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="301" y="11" width="159" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_Apellido}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="0" y="44" width="23" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CI:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="23" y="44" width="107" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_CI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="143" y="43" width="122" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Nacimiento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="265" y="43" width="107" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_FNacimiento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="392" y="42" width="31" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="423" y="42" width="107" height="21"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_Sexo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="0" y="79" width="64" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Direccion:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="64" y="79" width="130" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_Direccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="212" y="78" width="53" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Celular:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="265" y="79" width="107" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_Celular}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="392" y="78" width="31" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mail:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="423" y="78" width="107" height="21"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente_Email}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="11" y="138" width="109" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="120" y="138" width="128" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tratamiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="248" y="138" width="144" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Numero de Sesiones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d47ac75-f985-4b70-8907-a182e9a3796a" x="392" y="138" width="149" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sesiones Pendientes]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="13" y="0" width="107" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{consulta_Fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="120" y="0" width="129" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tratamiento_Nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="249" y="0" width="143" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{consulta_tratamiento_NoSesion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="dd013af0-7f1b-4ca0-88db-32762dcca689" x="392" y="0" width="149" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{consulta_tratamiento_SesionP}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="25" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="39" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="44ce3d29-4822-48eb-a8ad-338b51fb439e" x="0" y="19" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="be128e78-2322-4b26-bbfc-161122a5d5f0" x="503" y="19" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d0244bd1-7c09-4d67-b40b-7cda3c54a8cb" x="423" y="19" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
