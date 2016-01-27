@@ -1,16 +1,40 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package centro_odontologico;
+
+import Conexion.Conexion;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.table.DefaultTableModel;
+
+
 
 public class Consulta extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Tratamiento
-     */
+    Statement sent;
+    CallableStatement callablestatement =null;
+    Conexion xd =new Conexion();
+    Connection cn = xd.conexion();
+    String [] titulos={"Tratamiento","Precio", "Sesiones"};
+    DefaultTableModel modelo = new DefaultTableModel(null, titulos);
+    ResultSet rs;
+    ResultSet rs1;
+    
     public Consulta() {
         initComponents();
         setTitle("REGISTRO DE CONSULTAS");
         setLocationRelativeTo(null);
         setResizable(false);
+        cargarCombobox();
     }
 
     /**
@@ -24,17 +48,21 @@ public class Consulta extends javax.swing.JFrame {
 
         jpnlInformacion = new javax.swing.JPanel();
         lblCodigo = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
-        txtNombre = new javax.swing.JTextField();
+        txt_CI = new javax.swing.JTextField();
         lblNombre = new javax.swing.JLabel();
-        lblDescripcion = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtDescripcion = new javax.swing.JTextArea();
+        jDate = new com.toedter.calendar.JDateChooser();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnLimpiar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        lblNombreT = new javax.swing.JLabel();
+        jComboBox_NombreT = new javax.swing.JComboBox();
+        jButtonAgregarT = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaConTrat = new javax.swing.JTable();
+        jButtonDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(419, 312));
@@ -44,45 +72,20 @@ public class Consulta extends javax.swing.JFrame {
         lblCodigo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblCodigo.setText("Fecha:");
 
-        txtCodigo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+        txt_CI.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txt_CI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoActionPerformed(evt);
+                txt_CIActionPerformed(evt);
             }
         });
-        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_CI.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCodigoKeyTyped(evt);
-            }
-        });
-
-        txtNombre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
-            }
-        });
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreKeyTyped(evt);
+                txt_CIKeyTyped(evt);
             }
         });
 
         lblNombre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblNombre.setText("CI. Paciente:");
-
-        lblDescripcion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblDescripcion.setText("Descripción:");
-
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(160, 96));
-
-        txtDescripcion.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        txtDescripcion.setLineWrap(true);
-        txtDescripcion.setRows(4);
-        txtDescripcion.setAutoscrolls(false);
-        txtDescripcion.setMaximumSize(new java.awt.Dimension(28, 74));
-        txtDescripcion.setMinimumSize(new java.awt.Dimension(28, 74));
-        jScrollPane1.setViewportView(txtDescripcion);
 
         javax.swing.GroupLayout jpnlInformacionLayout = new javax.swing.GroupLayout(jpnlInformacion);
         jpnlInformacion.setLayout(jpnlInformacionLayout);
@@ -92,32 +95,25 @@ public class Consulta extends javax.swing.JFrame {
                 .addGap(37, 37, 37)
                 .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNombre)
-                    .addComponent(lblCodigo)
-                    .addComponent(lblDescripcion))
+                    .addComponent(lblCodigo))
                 .addGap(32, 32, 32)
-                .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jDate, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addComponent(txt_CI))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jpnlInformacionLayout.setVerticalGroup(
             jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnlInformacionLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(22, 22, 22)
+                .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblCodigo)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombre)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jpnlInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDescripcion))
-                .addContainerGap(29, Short.MAX_VALUE))
+                    .addComponent(txt_CI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete_32.png"))); // NOI18N
@@ -153,31 +149,120 @@ public class Consulta extends javax.swing.JFrame {
             }
         });
 
+        lblNombreT.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblNombreT.setText("Nombre:");
+
+        jComboBox_NombreT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_NombreTActionPerformed(evt);
+            }
+        });
+
+        jButtonAgregarT.setText("Add");
+        jButtonAgregarT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAgregarTActionPerformed(evt);
+            }
+        });
+
+        TablaConTrat.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Tratamiento", "Precio", "Sesiones"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(TablaConTrat);
+        if (TablaConTrat.getColumnModel().getColumnCount() > 0) {
+            TablaConTrat.getColumnModel().getColumn(1).setResizable(false);
+            TablaConTrat.getColumnModel().getColumn(1).setPreferredWidth(5);
+            TablaConTrat.getColumnModel().getColumn(2).setResizable(false);
+            TablaConTrat.getColumnModel().getColumn(2).setPreferredWidth(5);
+        }
+
+        jButtonDelete.setText("Delete");
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(lblNombreT)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox_NombreT, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonAgregarT)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonDelete)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonAgregarT)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNombreT)
+                            .addComponent(jComboBox_NombreT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jButtonDelete)))
+                .addGap(334, 334, 334))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancelar)
+                        .addGap(30, 30, 30))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jpnlInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(38, 38, 38)
-                                .addComponent(btnCancelar)))
-                        .addGap(40, 40, 40))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jpnlInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(24, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(192, 192, 192)
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,9 +271,11 @@ public class Consulta extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpnlInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -199,88 +286,253 @@ public class Consulta extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {                                   
+    private void txt_CIKeyTyped(java.awt.event.KeyEvent evt) {                                
         // TODO add your handling code here:
-        int max = 15;
-        numeroCaracteres( evt, max, evt.getSource());
-    }                                  
-
-    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {                                   
-        // TODO add your handling code here:
-        int max = 30;
-        char c = evt.getKeyChar();
-        
-        if(!Character.isLetter(c)){
+                                         
+        int num_caracteres = 10;
+        char c= evt.getKeyChar();
+        if(Character.isLetter(c)){
+            getToolkit().beep();
             evt.consume();    
-            JOptionPane.showMessageDialog(null,"Solo se admite letras" , "Validación", 
-                                                        JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Solo se admite números" , "Validación", JOptionPane.ERROR_MESSAGE);
         }
-        numeroCaracteres( evt, max, evt.getSource());
+        
+        if(txt_CI.getText().length()> num_caracteres){ // solo admite 10 caracteres
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane,"Solo 10 caracteres");
+        
     }                                  
+    }                               
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
         Principal_menu obj = new Principal_menu();
         dispose();
         obj.setVisible(true);
     }                                           
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-        if( txtCodigo.getText().equals("") || txtNombre.getText().equals("") || txtDescripcion.getText().equals("") ){
+        Boolean x=NumSesionesIsEmpty(modelo);
+        if(txt_CI.getText().equals("") || x){
             JOptionPane.showMessageDialog(null, "Faltan datos por ingresar.",
                 "Error", JOptionPane.ERROR_MESSAGE);
-            txtCodigo.requestFocus();
+            txt_CI.requestFocus();
         }else{
-            JOptionPane.showMessageDialog(null, "Se ha registrado con exito.",
-                "Confirmación", JOptionPane.INFORMATION_MESSAGE);
-            limpiarCampos();
-        }
+            int opcion=JOptionPane.showConfirmDialog(null, "¿Esta seguro de  Guardar Consulta?", "GUARDAR", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                        if(opcion==JOptionPane.YES_OPTION){
+                            boolean a = crearConsultaProcedure();
+                             System.out.println(a);
+                            if (a!=false){
+                                crearConsultaTratamientoProcedure();
+                                int opcion1=JOptionPane.showConfirmDialog(null, "¿Desea registrar una sesion?", "REGISTRAR SESION", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                                if(opcion1==JOptionPane.YES_OPTION){
+                                    Sesion obj = new Sesion(txt_CI.getText());
+                                    obj.setVisible(true);   
+                                    dispose();
+                                }
+                                }
+                                else{
+                                            limpiarCampos();    
+                                }
+                             
+                        }
+                        else{
+                            Principal_menu obj = new Principal_menu();
+                                            dispose();
+                                            obj.setVisible(true);
+                        }
+        }   
     }                                          
 
+//ESTA FUNCION CREA UNA CONSULTA    
+public boolean crearConsultaProcedure(){
+        Date date = jDate.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String cedula = txt_CI.getText();
+        boolean a = false;     
+        try{
+            String procedure = "{call crearConsulta(?,?,?)}";
+            callablestatement =cn.prepareCall(procedure); 
+            callablestatement.setString(1,sdf.format(date));
+            callablestatement.setInt(2,modelo.getRowCount());
+            callablestatement.setString(3,cedula);
+            callablestatement.executeUpdate();
+        
+            System.out.println("Consulta agregada");
+            JOptionPane.showMessageDialog(null, "Se ha registrado con exito.",
+                "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+            a= true;
+    }
+    catch(Exception x){
+        System.out.println("Error: "+x.getMessage());
+        JOptionPane.showMessageDialog(null, "NO SE ENCUENTRA REGISTRADO EL PACIENTE CONSULTA",
+                "ERROR", JOptionPane.ERROR_MESSAGE);
+        a = false;
+        
+    }  
+        return a;
+    
+    }
+    
+public void crearConsultaTratamientoProcedure(){
+        
+        Date date = jDate.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        int totaltratamientos = modelo.getRowCount();
+        String cedula = txt_CI.getText();
+        int ID_Con=0;
+        int ID_Trat=0;
+        String NSesiones =null;
+        
+        String sql1 = "SELECT ID FROM consulta WHERE Paciente_CI="+ cedula + " AND Fecha= " + "'" + sdf.format(date) + "'";
+        
+        try{        
+        for(int i=0; i<totaltratamientos; i++){
+            System.out.println(totaltratamientos);
+            String sql = getIDTratamiento(i);
+            java.sql.Statement st= cn.createStatement();
+            ResultSet rs= st.executeQuery(sql);   
+            while (rs.next()){
+                 ID_Trat = Integer.parseInt(rs.getString("ID"));
+             }
+ 
+            java.sql.Statement st1= cn.createStatement();
+            ResultSet rs1= st1.executeQuery(sql1); 
+             while (rs1.next()){
+                 ID_Con = Integer.parseInt(rs1.getString("ID"));
+             }
+           
+            NSesiones = TablaConTrat.getValueAt(i,2).toString();
+            System.out.println(NSesiones);
+            String procedure = "{call crearConsultaTratamiento(?,?,?,?,?,?)}";
+            
+            //VALIDAR QUE EL N_SESIONES ESTE LLENO PARA PODER GUARDAR
+            
+            callablestatement =cn.prepareCall(procedure);
+            callablestatement.setString(1,sdf.format(date));
+            callablestatement.setInt(2,Integer.parseInt(NSesiones));
+            callablestatement.setInt(3,Integer.parseInt(NSesiones));
+            callablestatement.setInt(4,0);
+            callablestatement.setInt(5,ID_Trat);
+            callablestatement.setInt(6,ID_Con);
+            callablestatement.executeUpdate();            
+        }
+            System.out.println("Consulta-Tratamiento agregado");
+               
+        }
+        catch(Exception x){
+            System.out.println("Error: "+x.getMessage());
+//            JOptionPane.showMessageDialog(null, "NO SE ENCUENTRA REGISTRADO EL PACIENTE C-TRATAMIENTO",
+//                    "ERROR", JOptionPane.ERROR_MESSAGE);
+
+        }   
+        
+    }
+
+    public String getIDTratamiento(int i){
+        
+        String sql = "SELECT ID FROM tratamiento WHERE Nombre= " + "'" + TablaConTrat.getValueAt(i,0)+ "'";
+        return sql;
+    }
+    
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
         limpiarCampos();
     }                                          
 
+    private void txt_CIActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        // TODO add your handling code here:
+    }                                      
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
         Tratamiento obj = new Tratamiento();
-        dispose();
         obj.setVisible(true);
+        dispose();
     }                                        
 
-    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void jComboBox_NombreTActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // TODO add your handling code here:
-    }                                         
+               
+    }                                                 
 
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void jButtonAgregarTActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
-    }                                         
+       String NT = jComboBox_NombreT.getSelectedItem().toString();
+       cargartabla(NT);
+        
+    }                                               
+
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        // TODO add your handling code here:
+        int fila = TablaConTrat.getSelectedRow();
+        modelo.removeRow(fila);
+        
+    }                                             
 
     //***************************************//
     //***************************************//
     //*********  F U N C I O N E S  *********//  
     //***************************************//
     //***************************************//
-    
-    private void numeroCaracteres( java.awt.event.KeyEvent evt,  int maximo, Object obj){
-        JTextField txt = (JTextField)obj;
+    private Boolean NumSesionesIsEmpty(DefaultTableModel modelo){
+        int filas =modelo.getRowCount();
+        Boolean vacio=false;
         
-        if ( txt.getText().length() >= maximo ){
-            evt.consume();
-            JOptionPane.showMessageDialog(rootPane, "El número máximo de caracteres es "+maximo);
-            txt.requestFocus();
-        }   
+        for(int i=0; i<filas; i++){
+          System.out.println("VALOOOOR: "+TablaConTrat.getValueAt(i,2));
+          if(TablaConTrat.getValueAt(i,2)==null) {
+              vacio=true;
+          }
+        }
+        return vacio;
     }
     
     private void limpiarCampos(){
-        txtCodigo.setText("");
-        txtNombre.setText("");
-        txtDescripcion.setText("");
-        txtCodigo.requestFocus();
+        txt_CI.setText("");
+        txt_CI.requestFocus();
+        jDate.setDate(null);
     }
     
+    public void cargarCombobox(){
+        
+        String sql= "Select Nombre from tratamiento";
+        try {
+        Statement st = cn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        jComboBox_NombreT.removeAllItems();
+        while(rs.next()){
+            jComboBox_NombreT.addItem(rs.getString(1));
+        }
+        }
+        catch(Exception x){
+        System.out.println("Error: "+x.getMessage());
+        JOptionPane.showMessageDialog(null, "No existen tratamientos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        
+    }
+    }
+    
+    void crearTabla(){
+        
+    }
+    public void cargartabla(String NT){
+        String [] registros= new String[2];
+        String sql= "Select * from tratamiento";
+        try {
+            java.sql.Statement st= cn.createStatement();
+            ResultSet rs= st.executeQuery(sql);   
+            while (rs.next()){
+                if(NT.equals(rs.getString("Nombre"))== true){
+                registros[0]= rs.getString("Nombre");
+                registros[1]= rs.getString("PrecioInicial");
+                
+                modelo.addRow(registros);
+                TablaConTrat.setModel(modelo);
+                }   
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: "+ex.getMessage());
+           }
+    }
     /**
      * @param args the command line arguments
      */
@@ -316,21 +568,24 @@ public class Consulta extends javax.swing.JFrame {
             }
         });
     }
-    
 
     // Variables declaration - do not modify                     
+    private javax.swing.JTable TablaConTrat;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonAgregarT;
+    private javax.swing.JButton jButtonDelete;
+    private javax.swing.JComboBox jComboBox_NombreT;
+    private com.toedter.calendar.JDateChooser jDate;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel jpnlInformacion;
     private javax.swing.JLabel lblCodigo;
-    private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblNombre;
-    private javax.swing.JTextField txtCodigo;
-    private javax.swing.JTextArea txtDescripcion;
-    private javax.swing.JTextField txtNombre;
+    private javax.swing.JLabel lblNombreT;
+    private javax.swing.JTextField txt_CI;
     // End of variables declaration                   
 }
