@@ -25,10 +25,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-/**
- *
- * @author Raquel
- */
 public class EditarPaciente extends javax.swing.JFrame {
     DefaultTableModel modelo;
     Statement sent;
