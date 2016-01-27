@@ -389,3 +389,4 @@ public class HistorialClinico extends javax.swing.JFrame {
     private javax.swing.JTextField txtCedula;
     // End of variables declaration                   
 }
+
